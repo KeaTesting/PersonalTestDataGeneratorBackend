@@ -39,9 +39,9 @@ namespace PersonalTestDataGeneratorBackend
         public void SetBirthdayFromCpr(string cpr)
         {
             //Takes the first 8 digits of the cpr number (xx/xx/xx)
-            string test = cpr.Substring(0, 8);
+            string setDate = cpr.Substring(0, 10);
 
-            if(DateOnly.TryParse(test, out DateOnly date))
+            if (DateOnly.TryParse(setDate, out DateOnly date))
             {
                 _birthday = date;
             }

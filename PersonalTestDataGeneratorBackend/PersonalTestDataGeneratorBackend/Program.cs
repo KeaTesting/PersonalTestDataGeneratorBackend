@@ -30,15 +30,22 @@ class Program
 
 
         //Example for a complete Person data (for now)
+        foreach (var item in person)
+        {
+            var cpr = GenerateCprWithGender(item.Gender);
+            item.SetBirthdayFromCpr(cpr); //Cannot for the life of me get this to show as dd/MM/yy
 
-        var cpr = GenerateCprWithGender(person[0].Gender);
-        person[0].SetBirthdayFromCpr(cpr); //Cannot for the life of me get this to show as dd/MM/yy
-        DateOnly date = person[0].Birthday;
-        string cleanDate = date.ToString("dd/MM/yy");
+            //This prolly can be done somewhere else tbh.
+            var clean = cpr.Replace("/", "");
+            var partOne = clean.Substring(0, 4);
+            var partTwo = clean.Substring(6);
+            var finalCpr = $"{partOne}{partTwo}";
+            item.Cpr = finalCpr; //removes "/" from cpr
+
+        }
 
 
-        var clean = cpr.Replace("/", "");
-        person[0].Cpr = clean; //removes "/" from cpr
+
 
         app.MapGet("/", () => person);
 
@@ -153,12 +160,12 @@ class Program
         {
             month = "0" + monthInt.ToString();
         }
-        else 
+        else
         {
             month = monthInt.ToString();
         }
 
-        if(int.Parse(day) < 10)
+        if (int.Parse(day) < 10)
         {
             day = "0" + day;
         }
@@ -168,9 +175,9 @@ class Program
         {
             year = "0" + yearInt.ToString();
         }
-        else 
-        {  
-            year = yearInt.ToString(); 
+        else
+        {
+            year = yearInt.ToString();
         }
 
         //This prolly should be better made to hold it true to CPR rules
@@ -253,13 +260,19 @@ class Program
 
 
         year = yearInt.ToString();
-        year = year.Substring(2, 2);
-
 
         //Assign running number based on year
         if (yearInt < 2000)
         {
             runningNumber = random.Next(0, 499).ToString();
+            if(runningNumber.Length == 1)
+            {
+                runningNumber = "00" + runningNumber;
+            }
+            else if (runningNumber.Length == 2)
+            {
+                runningNumber = "0" + runningNumber;
+            }
         }
         else
         {
@@ -312,12 +325,6 @@ class Program
 
 
 
-        Console.WriteLine(day);
-        Console.WriteLine(month);
-        Console.WriteLine(year);
-        Console.WriteLine(runningNumber);
-        Console.WriteLine(genderNumber);
-        Console.WriteLine(gender);
 
         //Formatted, so it looks like a CPR number and SetBirthdayFromCpr can parse it
         Cpr = $"{day}/{month}/{year}-{runningNumber}{genderNumber}";
