@@ -28,7 +28,7 @@ class Program
 
         #endregion
 
-
+        //This could prolly be a method in itself
         //Example for a complete Person data (for now)
         foreach (var item in person)
         {
