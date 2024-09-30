@@ -10,8 +10,10 @@ namespace PersonalTestDataGeneratorBackend
 
         private DateOnly _birthday;
 
+        public string Cpr {get; set;}
 
-        public Person()
+
+    public Person()
         {
 
         }
