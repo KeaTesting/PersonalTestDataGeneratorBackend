@@ -53,7 +53,7 @@ namespace PersonalTestDataGeneratorBackend
             return randomPeople;
         }
 
-        static JsonElement Reader()
+        static JsonElement Reader()//Refaktore til en anden return type. Måske parse fil navnet med i metoden??
         {
             // Read the JSON file
             string jsonFilePath = "person-names.json"; // Path to your JSON file
