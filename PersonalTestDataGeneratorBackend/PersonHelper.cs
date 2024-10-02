@@ -19,15 +19,9 @@ namespace PersonalTestDataGeneratorBackend
         //Skal "bare" parse en int for antallet af personer man vil have
         public static List<Person> GenerateData(int amount)
         {
-            
-            //Sets an option to ignore the case of property names during deserialization.
-            var options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true,
-            };
 
             // Deserialize the JSON file
-            List<Person> people = JsonSerializer.Deserialize<List<Person>>(Reader().ToString(), options);
+            List<Person> people = Reader("person-names.json");
 
             //Makes list to hold random people
             List<Person> randomPeople = new List<Person>();
@@ -53,10 +47,16 @@ namespace PersonalTestDataGeneratorBackend
             return randomPeople;
         }
 
-        static JsonElement Reader()//Refaktore til en anden return type. Måske parse fil navnet med i metoden??
+        static List<Person> Reader(string filePath)//Refaktore til en anden return type. Måske parse fil navnet med i metoden??
         {
+            //Sets an option to ignore the case of property names during deserialization.
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+            };
+
             // Read the JSON file
-            string jsonFilePath = "person-names.json"; // Path to your JSON file
+            string jsonFilePath = filePath; // Path to your JSON file
             string jsonString = File.ReadAllText(jsonFilePath);
 
             // Parse the JSON file
@@ -65,7 +65,7 @@ namespace PersonalTestDataGeneratorBackend
             // Get the persons element
             var personsElements = jsonDoc.RootElement.GetProperty("persons");
 
-            return personsElements;
+            return JsonSerializer.Deserialize<List<Person>>(personsElements.ToString(), options);
         }
 
         //Generates a random CPR number.
