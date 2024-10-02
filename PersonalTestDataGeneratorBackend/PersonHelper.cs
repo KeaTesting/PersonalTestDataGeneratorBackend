@@ -19,15 +19,45 @@ namespace PersonalTestDataGeneratorBackend
         //Skal "bare" parse en int for antallet af personer man vil have
         public static List<Person> GenerateData(int amount)
         {
-            // Read the JSON file
-            string jsonFilePath = "person-names.json"; // Path to your JSON file
-            string jsonString = File.ReadAllText(jsonFilePath);
-
+            
             //Sets an option to ignore the case of property names during deserialization.
             var options = new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true,
             };
+
+            // Deserialize the JSON file
+            List<Person> people = JsonSerializer.Deserialize<List<Person>>(Reader().ToString(), options);
+
+            //Makes list to hold random people
+            List<Person> randomPeople = new List<Person>();
+
+            // Generate random people after given amount
+            if (people != null && people.Count > 0)
+            {
+                foreach (var person in people)
+                {
+                    Random random = new Random();
+
+                    int randomIndex = random.Next(people.Count);
+                    Person randomPerson = people[randomIndex];
+                    randomPeople.Add(randomPerson);
+                }
+            }
+            else
+            {
+                Console.WriteLine("No data found");
+                return null;
+            }
+
+            return randomPeople;
+        }
+
+        static JsonElement Reader()
+        {
+            // Read the JSON file
+            string jsonFilePath = "person-names.json"; // Path to your JSON file
+            string jsonString = File.ReadAllText(jsonFilePath);
 
             // Parse the JSON file
             var jsonDoc = JsonDocument.Parse(jsonString);
@@ -35,34 +65,8 @@ namespace PersonalTestDataGeneratorBackend
             // Get the persons element
             var personsElements = jsonDoc.RootElement.GetProperty("persons");
 
-            // Deserialize the JSON file
-            List<Person> people = JsonSerializer.Deserialize<List<Person>>(personsElements.ToString(), options);
-
-            //Makes list to hold random people
-            List<Person> randomPeople = new List<Person>();
-
-            // Generate random people after given amount
-            while (amount > 0)
-            {
-                if (people != null && people.Count > 0)
-                {
-                    Random random = new Random();
-
-                    int randomIndex = random.Next(people.Count);
-                    Person randomPerson = people[randomIndex];
-                    randomPeople.Add(randomPerson);
-                    amount--;
-                }
-                else
-                {
-                    Console.WriteLine("No data found");
-                    return null;
-                }
-            }
-
-            return randomPeople;
+            return personsElements;
         }
-
 
         //Generates a random CPR number.
         //Makes sure if the day number is true to the month and if it's a leap year.
