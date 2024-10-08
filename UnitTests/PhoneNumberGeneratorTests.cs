@@ -1,6 +1,6 @@
 ﻿using System;
 using Xunit;
-using PersonalTestDataGeneratorBackend;
+using PersonalTestDataGeneratorBackend.Generators;
 namespace UnitTests
 {
     public class PhoneNumberGeneratorTests
