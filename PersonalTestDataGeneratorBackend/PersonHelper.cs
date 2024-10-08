@@ -31,11 +31,18 @@ namespace PersonalTestDataGeneratorBackend
             {
                 foreach (var person in people)
                 {
-                    Random random = new Random();
+                    try
+                    {
+                        Random random = new Random();
+                        int randomIndex = random.Next(people.Count);
+                        Person randomPerson = people[randomIndex];
+                        randomPeople.Add(randomPerson);
 
-                    int randomIndex = random.Next(people.Count);
-                    Person randomPerson = people[randomIndex];
-                    randomPeople.Add(randomPerson);
+                    } catch 
+                    {
+                        Console.WriteLine("Random failed");
+                    }
+
                 }
             }
             else
@@ -77,130 +84,138 @@ namespace PersonalTestDataGeneratorBackend
         //750-999 on years 2000-2036
         public static string GenerateCprWithGender(string gender)
         {
-            bool isLeapYear;
-            string day;
-            string month;
-            string year;
-            string runningNumber;
-            string genderNumber = "";
-            string Cpr;
+            try
+            {
+                bool isLeapYear;
+                string day;
+                string month;
+                string year;
+                string runningNumber;
+                string genderNumber = "";
+                string Cpr;
 
-            Random random = new Random();
+                Random random = new Random();
 
-            //Generates a random year
-            int yearInt = random.Next(1900, 2024);
+                //Generates a random year
+                int yearInt = random.Next(1900, 2024);
 
-            if (yearInt % 4 == 0 && yearInt % 100 != 0 || yearInt % 400 == 0)
-            {
-                isLeapYear = true;
-            }
-            else
-            {
-                isLeapYear = false;
-            }
-
-            //Generates a random day
-            int monthInt = random.Next(1, 12);
-            if (monthInt == 2 && isLeapYear == false)
-            {
-                day = random.Next(1, 28).ToString();
-            }
-            else if (monthInt == 2 && isLeapYear == true)
-            {
-                day = random.Next(1, 29).ToString();
-            }
-            else if (monthInt == 4 || monthInt == 6 || monthInt == 9 || monthInt == 11)
-            {
-                day = random.Next(1, 30).ToString();
-            }
-            else
-            {
-                day = random.Next(1, 31).ToString();
-            }
-
-            //checks to see if month, day and year is less than 10 and adds a 0 in front of the number.
-            if (monthInt < 10)
-            {
-                month = "0" + monthInt.ToString();
-            }
-            else
-            {
-                month = monthInt.ToString();
-            }
-
-            if (int.Parse(day) < 10)
-            {
-                day = "0" + day;
-            }
-
-            year = yearInt.ToString();
-
-            //Assign running number based on year
-            if (yearInt < 2000)
-            {
-                runningNumber = random.Next(0, 499).ToString();
-                if (runningNumber.Length == 1)
+                if (yearInt % 4 == 0 && yearInt % 100 != 0 || yearInt % 400 == 0)
                 {
-                    runningNumber = "00" + runningNumber;
+                    isLeapYear = true;
                 }
-                else if (runningNumber.Length == 2)
+                else
                 {
-                    runningNumber = "0" + runningNumber;
+                    isLeapYear = false;
                 }
-            }
-            else
-            {
-                runningNumber = random.Next(750, 999).ToString();
-            }
 
-            if (gender == "male")
-            {
-                int rand = random.Next(1, 5);
-
-                switch (rand) //I will break the Geneva convention on anyone who deletes this code
+                //Generates a random day
+                int monthInt = random.Next(1, 12);
+                if (monthInt == 2 && isLeapYear == false)
                 {
-                    case 1:
-                        genderNumber = "1";
-                        break;
-                    case 2:
-                        genderNumber = "3";
-                        break;
-                    case 3:
-                        genderNumber = "5";
-                        break;
-                    case 4:
-                        genderNumber = "7";
-                        break;
-                    case 5:
-                        genderNumber = "9";
-                        break;
+                    day = random.Next(1, 28).ToString();
                 }
-            }
-            else
-            {
-                int rand = random.Next(1, 4);
-
-                switch (rand) //I will break the Geneva convention on anyone who deletes this code
+                else if (monthInt == 2 && isLeapYear == true)
                 {
-                    case 1:
-                        genderNumber = "2";
-                        break;
-                    case 2:
-                        genderNumber = "4";
-                        break;
-                    case 3:
-                        genderNumber = "6";
-                        break;
-                    case 4:
-                        genderNumber = "8";
-                        break;
+                    day = random.Next(1, 29).ToString();
                 }
+                else if (monthInt == 4 || monthInt == 6 || monthInt == 9 || monthInt == 11)
+                {
+                    day = random.Next(1, 30).ToString();
+                }
+                else
+                {
+                    day = random.Next(1, 31).ToString();
+                }
+
+                //checks to see if month, day and year is less than 10 and adds a 0 in front of the number.
+                if (monthInt < 10)
+                {
+                    month = "0" + monthInt.ToString();
+                }
+                else
+                {
+                    month = monthInt.ToString();
+                }
+
+                if (int.Parse(day) < 10)
+                {
+                    day = "0" + day;
+                }
+
+                year = yearInt.ToString();
+
+                //Assign running number based on year
+                if (yearInt < 2000)
+                {
+                    runningNumber = random.Next(0, 499).ToString();
+                    if (runningNumber.Length == 1)
+                    {
+                        runningNumber = "00" + runningNumber;
+                    }
+                    else if (runningNumber.Length == 2)
+                    {
+                        runningNumber = "0" + runningNumber;
+                    }
+                }
+                else
+                {
+                    runningNumber = random.Next(750, 999).ToString();
+                }
+
+                if (gender == "male")
+                {
+                    int rand = random.Next(1, 5);
+
+                    switch (rand) //I will break the Geneva convention on anyone who deletes this code
+                    {
+                        case 1:
+                            genderNumber = "1";
+                            break;
+                        case 2:
+                            genderNumber = "3";
+                            break;
+                        case 3:
+                            genderNumber = "5";
+                            break;
+                        case 4:
+                            genderNumber = "7";
+                            break;
+                        case 5:
+                            genderNumber = "9";
+                            break;
+                    }
+                }
+                else
+                {
+                    int rand = random.Next(1, 4);
+
+                    switch (rand) //I will break the Geneva convention on anyone who deletes this code
+                    {
+                        case 1:
+                            genderNumber = "2";
+                            break;
+                        case 2:
+                            genderNumber = "4";
+                            break;
+                        case 3:
+                            genderNumber = "6";
+                            break;
+                        case 4:
+                            genderNumber = "8";
+                            break;
+                    }
+                }
+
+                //Formatted, so it looks like a CPR number and SetBirthdayFromCpr can parse it
+                Cpr = $"{day}/{month}/{year}-{runningNumber}{genderNumber}";
+
+                return Cpr;
             }
-
-            //Formatted, so it looks like a CPR number and SetBirthdayFromCpr can parse it
-            Cpr = $"{day}/{month}/{year}-{runningNumber}{genderNumber}";
-
-            return Cpr;
+            catch
+            {
+                Console.WriteLine("CPR generation failed");
+                return null;
+            }
         }
 
     }
