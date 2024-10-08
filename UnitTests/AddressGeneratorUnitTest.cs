@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using 
+using Xunit;
+using PersonalTestDataGeneratorBackend;
+using PersonalTestDataGeneratorBackend.PersonalTestDataGeneratorBackend;
 
 namespace UnitTests
 {
-    internal class AddressGeneratorUnitTest
+    public class AddressGeneratorUnitTest
     {
     }
 }
