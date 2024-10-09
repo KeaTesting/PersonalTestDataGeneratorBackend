@@ -16,7 +16,7 @@
         }
 
         //Street. A random assortment of alphabetic characters
-        private string GenerateStreet()
+        public string GenerateStreet()
         {
             int length = random.Next(5, 15);
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
@@ -24,7 +24,7 @@
         }
 
         //Number. A number from 1 to 999 optionally followed by an uppercase letter (e.g., 43B)
-        private string GenerateNumber()
+        public string GenerateNumber()
         {
             int number = random.Next(1, 1000);
             char? letter = random.Next(0, 2) == 1 ? (char?)random.Next('A', 'Z' + 1) : null;
@@ -32,13 +32,13 @@
         }
 
         //Floor. Either “st” or a number from 1 to 99
-        private string GenerateFloor()
+        public string GenerateFloor()
         {
             return random.Next(0, 2) == 0 ? "st" : random.Next(1, 30).ToString(); 
         }
 
         //Door. “th”, “mf”, “tv”, a number from 1 to 50, or a lowercase letter optionally followed by a dash, then followed by one to three numeric digits (e.g., c3, d-14)
-        private string GenerateDoor()
+        public string GenerateDoor()
         {
             int choice = random.Next(0, 5);
             switch (choice)
@@ -56,8 +56,9 @@
         }
 
         //Postal code and town. Randomly extracted from the provided database addresses.sql
-        private static string? GeneratePostalCode()
+        public static string? GeneratePostalCode()
         {
+            //implement this, when the database is made and has the data from the addresses.sql
             return null;
         }
     }
