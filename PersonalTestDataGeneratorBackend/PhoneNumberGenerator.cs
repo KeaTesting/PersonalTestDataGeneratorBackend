@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace PersonalTestDataGeneratorBackend.PersonalTestDataGeneratorBackend
+namespace PersonalTestDataGeneratorBackend
 {
     public class PhoneNumberGenerator
     {

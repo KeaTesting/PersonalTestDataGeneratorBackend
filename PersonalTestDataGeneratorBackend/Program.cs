@@ -1,34 +1,46 @@
-using PersonalTestDataGeneratorBackend;
 using System;
 using System.IO;
 using System.Text.Json;
 
-class Program
+namespace PersonalTestDataGeneratorBackend
 {
-    static void Main(string[] args)
+    public static class Program
     {
-        var builder = WebApplication.CreateBuilder(args);
-        var app = builder.Build();
-
-        //Generate persons
-        List<Person> person = PersonHelper.GenerateData(1);
-
-        
-        //This could prolly be a method in itself
-        //Example for a complete Person data (for now)
-        foreach (var item in person)
+        static void Main(string[] args)
         {
-            var cpr = PersonHelper.GenerateCprWithGender(item.Gender);
-            item.SetBirthdayFromCpr(cpr); //Cannot for the life of me get this to show as dd/MM/yy
+            var builder = WebApplication.CreateBuilder(args);
+            builder.Services.AddCors(p => p.AddPolicy("*", b =>
+            b.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
+            var app = builder.Build();
+
+            //Generate persons
+            List<Person> person = PersonHelper.GenerateData(1);
 
 
-            item.Cpr = PersonHelper.CleanCpr(cpr); //removes "/" from cpr
+            //This could prolly be a method in itself
+            //Example for a complete Person data (for now)
+            foreach (var item in person)
+            {
+                var cpr = PersonHelper.GenerateCprWithGender(item.Gender);
+                item.SetBirthdayFromCpr(cpr); //Cannot for the life of me get this to show as dd/MM/yy
 
+
+                item.Cpr = PersonHelper.CleanCpr(cpr); //removes "/" from cpr
+
+            }
+
+            app.MapGet("/", () => person);
+            app.MapPost("/person", (PersonQuery query) =>
+            {
+                Console.WriteLine(JsonSerializer.Serialize(query));
+            });
+            app.UseSwagger();
+            app.UseSwaggerUI();
+            app.UseCors("*");
+
+            app.Run();
         }
-
-        app.MapGet("/", () => person);
-
-
-        app.Run();
     }
 }
