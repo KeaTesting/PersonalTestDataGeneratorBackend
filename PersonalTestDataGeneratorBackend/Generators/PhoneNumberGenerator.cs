@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
 
-namespace PersonalTestDataGeneratorBackend
+namespace PersonalTestDataGeneratorBackend.Generators
 {
-    public class PhoneNumberGenerator
+    public static class PhoneNumberGenerator
     {
         // List of valid prefixes for Danish phone numbers
         public static readonly string[] validPrefixes =
@@ -17,7 +17,7 @@ namespace PersonalTestDataGeneratorBackend
         "827", "829"
     };
 
-        public string GeneratePhoneNumber()
+        public static string GeneratePhoneNumber()
         {
             Random random = new Random();
 
