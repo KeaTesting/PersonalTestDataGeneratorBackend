@@ -5,13 +5,12 @@ namespace UnitTests
 {
     public class PhoneNumberGeneratorTests
     {
-        private readonly PhoneNumberGenerator _generator = new PhoneNumberGenerator();
-
+        
         [Fact]
         public void GeneratedPhoneNumber_ShouldReturn8Digits()
         {
             // Act
-            string phoneNumber = _generator.GeneratePhoneNumber();
+            string phoneNumber = PhoneNumberGenerator.GeneratePhoneNumber();
 
             // Assert
             Assert.Equal(8, phoneNumber.Length);
@@ -23,7 +22,7 @@ namespace UnitTests
             string[] validPrefixes = PhoneNumberGenerator.validPrefixes;
 
             // Act
-            string phoneNumber = _generator.GeneratePhoneNumber();
+            string phoneNumber = PhoneNumberGenerator.GeneratePhoneNumber();
 
             // Assert
             bool startsWithValidPrefix = false;
@@ -43,7 +42,7 @@ namespace UnitTests
         public void GeneratedPhoneNumber_ShouldContainOnlyDigits()
         {
             // Act
-            string phoneNumber = _generator.GeneratePhoneNumber();
+            string phoneNumber = PhoneNumberGenerator.GeneratePhoneNumber();
 
             // Assert
             Assert.Matches(@"^\d+$", phoneNumber);
