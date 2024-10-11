@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using PersonalTestDataGeneratorBackend.Generators;
+using System.Text.Json;
 
 namespace PersonalTestDataGeneratorBackend
 {
@@ -13,8 +14,46 @@ namespace PersonalTestDataGeneratorBackend
             var finalCpr = $"{partOne}{partTwo}";
             return finalCpr;
         }
-
-
+        public static List<Person> GeneratePersons(PersonQuery query, int amount)
+        {
+            List<Person> people = Reader("person-names.json");
+            Random random = new Random();
+            List<Person> returnvalue = new List<Person>();
+            for (int i = 0; i < amount; i++)
+            {
+                var person = new Person();
+                var gender = random.Next(0, 2) == 0 ? "female" : "male";
+                var cpr = GenerateCprWithGender(gender);
+                if(query.Cpr)
+                {
+                    person.Cpr = CleanCpr(cpr);
+                }
+                if(query.Gender)
+                {
+                    person.Gender = gender;
+                }
+                if(query.Birthday)
+                {
+                    person.Birthday = SetBirthdayFromCpr(cpr);
+                }
+                if (query.Name)
+                {
+                    var genderedNameList = people.Where(x => x.Gender == gender);
+                    person.Name = genderedNameList.ToArray()[random.Next(0, genderedNameList.Count() - 1)].Name;
+                    person.Surname = genderedNameList.ToArray()[random.Next(0, genderedNameList.Count() - 1)].Surname;
+                }
+                if(query.PhoneNumber)
+                {
+                    person.PhoneNumber = PhoneNumberGenerator.GeneratePhoneNumber();
+                }
+                if (query.Address)
+                {
+                    //TODO
+                }
+                returnvalue.Add(person);
+            }
+            return returnvalue;
+        }
         //Mener denne metode kan/skal bruges til at generere en random person fra json filen.
         //Skal "bare" parse en int for antallet af personer man vil have
         public static List<Person> GenerateData(int amount)
@@ -29,8 +68,10 @@ namespace PersonalTestDataGeneratorBackend
             // Generate random people after given amount
             if (people != null && people.Count > 0)
             {
-                foreach (var person in people)
+                for (int i = 0; i < amount; i++)
                 {
+
+
                     try
                     {
                         Random random = new Random();
@@ -38,7 +79,8 @@ namespace PersonalTestDataGeneratorBackend
                         Person randomPerson = people[randomIndex];
                         randomPeople.Add(randomPerson);
 
-                    } catch 
+                    }
+                    catch
                     {
                         Console.WriteLine("Random failed");
                     }
@@ -217,6 +259,23 @@ namespace PersonalTestDataGeneratorBackend
                 return null;
             }
         }
+        public static DateOnly SetBirthdayFromCpr(string cpr)
+        {
+            //Takes the first 8 digits of the cpr number (xx/xx/xx)
+            //TODO: hvad hvis CPR ikke er formateret sådan der?
+            string setDate = cpr.Substring(0, 10);
+            DateOnly value;
+            if (DateOnly.TryParse(setDate, out DateOnly date))
+            {
+                value = date;
+            }
+            else
+            {
+                throw new Exception("Invalid CPR");
+            }
+            return value;
+        }
+
 
     }
 }
