@@ -40,6 +40,7 @@ namespace PersonalTestDataGeneratorBackend
             app.UseSwaggerUI();
             app.UseCors("*");
 
+
             app.Run();
         }
     }
