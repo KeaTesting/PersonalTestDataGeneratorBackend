@@ -50,6 +50,7 @@ namespace EndToEnd
 
             // Assert that the element with the id "cpr" is present
             Assert.NotNull(cprElement);
+            driver.Close();
         }
 
         [Fact]
@@ -81,8 +82,40 @@ namespace EndToEnd
             Assert.NotNull(lastNameElement);
             Assert.NotNull(dob);
 
-
-
+            driver.Close();
         }
+
+        [Fact]
+        public void Return_a_fake_CPR_first_name_last_name_and_gender()
+        {
+            var driver = Driver();
+
+            IWebElement partialGenerationElement = driver.FindElement(By.CssSelector("#partialOptions > input"));
+            partialGenerationElement.Click();
+
+            //Selecting a value from the dropdown
+            SelectElement selectElement = new SelectElement(driver.FindElement(By.CssSelector("#cmbPartialOptions")));
+            selectElement.SelectByValue("cpr-name-gender");
+
+            IWebElement submitButton = driver.FindElement(By.CssSelector("#submit > input"));
+            submitButton.Click();
+
+            // Wait for the element with the id "cpr" to be visible
+            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(2));
+
+            IWebElement firstNameElement = wait.Until(driver => driver.FindElement(By.CssSelector(".firstName")));
+            IWebElement lastNameElement = wait.Until(driver => driver.FindElement(By.CssSelector(".lastName")));
+            IWebElement genderElement = wait.Until(driver => driver.FindElement(By.CssSelector(".gender")));
+            IWebElement cprElement = wait.Until(driver => driver.FindElement(By.CssSelector(".cpr")));
+
+            Assert.NotNull(firstNameElement);
+            Assert.NotNull(lastNameElement);
+            Assert.NotNull(genderElement);
+            Assert.NotNull(cprElement);
+
+            driver.Close();
+        }
+
+        
     }
 }
