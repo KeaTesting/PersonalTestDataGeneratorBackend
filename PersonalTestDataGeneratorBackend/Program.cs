@@ -1,34 +1,148 @@
-using PersonalTestDataGeneratorBackend;
+using Microsoft.EntityFrameworkCore;
+using PersonalTestDataGeneratorBackend.DB;
+using PersonalTestDataGeneratorBackend.Generators;
 using System;
 using System.IO;
 using System.Text.Json;
 
-class Program
+namespace PersonalTestDataGeneratorBackend
 {
-    static void Main(string[] args)
+    public static class Program
     {
-        var builder = WebApplication.CreateBuilder(args);
-        var app = builder.Build();
-
-        //Generate persons
-        List<Person> person = PersonHelper.GenerateData(1);
-
-        
-        //This could prolly be a method in itself
-        //Example for a complete Person data (for now)
-        foreach (var item in person)
+        static void Main(string[] args)
         {
-            var cpr = PersonHelper.GenerateCprWithGender(item.Gender);
-            item.SetBirthdayFromCpr(cpr); //Cannot for the life of me get this to show as dd/MM/yy
-
-
-            item.Cpr = PersonHelper.CleanCpr(cpr); //removes "/" from cpr
-
-        }
-
-            app.MapGet("/", () => person);
-            app.MapPost("/person", (PersonQuery query) =>
+            var builder = WebApplication.CreateBuilder(args);
+            builder.Services.AddDbContext<GeneratorDB>(options =>
             {
+                options.UseMySql(builder.Configuration.GetConnectionString("MySqlConnection"), ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("MySqlConnection")));
+            });
+            builder.Services.AddCors(p => p.AddPolicy("*", b =>
+            b.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
+            var app = builder.Build();
+
+
+            app.MapGet("/cpr", () =>
+            {
+                var query = new PersonQuery()
+                {
+                    Address = false,
+                    Birthday = false,
+                    Cpr = true,
+                    Gender = false,
+                    Name = false,
+                    Surname = false,
+                    PhoneNumber = false
+                };
+                return PersonHelper.GeneratePersons(query, 1).First();
+
+            }); 
+            app.MapGet("/name-gender", () =>
+            {
+                var query = new PersonQuery()
+                {
+                    Address = false,
+                    Birthday = false,
+                    Cpr = false,
+                    Gender = true,
+                    Name = true,
+                    Surname = true,
+                    PhoneNumber = false
+                };
+                return PersonHelper.GeneratePersons(query, 1).First();
+
+            }); ;
+            app.MapGet("/name-gender-dob", () =>
+            {
+                var query = new PersonQuery()
+                {
+                    Address = false,
+                    Birthday = true,
+                    Cpr = false,
+                    Gender = true,
+                    Name = true,
+                    Surname = true,
+                    PhoneNumber = false
+                };
+                return PersonHelper.GeneratePersons(query, 1).First();
+
+            });
+            app.MapGet("/cpr-name-gender", () =>
+            {
+                var query = new PersonQuery()
+                {
+                    Address = false,
+                    Birthday = false,
+                    Cpr = true,
+                    Gender = true,
+                    Name = true,
+                    Surname = true,
+                    PhoneNumber = false
+                };
+                return PersonHelper.GeneratePersons(query, 1).First();
+
+            });
+            app.MapGet("/cpr-name-gender-dob", () =>
+            {
+                var query = new PersonQuery()
+                {
+                    Address = false,
+                    Birthday = true,
+                    Cpr = true,
+                    Gender = true,
+                    Name = true,
+                    Surname = true,
+                    PhoneNumber = false
+                };
+                return PersonHelper.GeneratePersons(query, 1).First();
+
+            });
+            app.MapGet("/address", () =>
+            {
+                var query = new PersonQuery()
+                {
+                    Address = true,
+                    Birthday = false,
+                    Cpr = false,
+                    Gender = false,
+                    Name = false,
+                    Surname = false,
+                    PhoneNumber = false
+                };
+                return PersonHelper.GeneratePersons(query, 1).First();
+
+            });
+            app.MapGet("/phone", () =>
+            {
+                var query = new PersonQuery()
+                {
+                    Address = false,
+                    Birthday = false,
+                    Cpr = false,
+                    Gender = false,
+                    Name = false,
+                    Surname = false,
+                    PhoneNumber = true
+                };
+                return PersonHelper.GeneratePersons(query, 1).First();
+
+            });
+
+            app.MapGet("/person", (int n) =>
+            {
+                var query = new PersonQuery()
+                {
+                    Address = true,
+                    Birthday = true,
+                    Cpr = true,
+                    Gender = true,
+                    Name = true,
+                    Surname = true,
+                    PhoneNumber = true
+                };
+                return PersonHelper.GeneratePersons(query, n);
+            });
 
                 var person = new Person();
                 //if(query.)
@@ -38,6 +152,7 @@ class Program
             app.UseSwaggerUI();
             app.UseCors("*");
 
-        app.Run();
+            app.Run();
+        }
     }
 }
