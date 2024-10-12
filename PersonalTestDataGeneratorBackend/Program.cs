@@ -26,8 +26,17 @@ class Program
 
         }
 
-        app.MapGet("/", () => person);
+            app.MapGet("/", () => person);
+            app.MapPost("/person", (PersonQuery query) =>
+            {
 
+                var person = new Person();
+                //if(query.)
+                Console.WriteLine(JsonSerializer.Serialize(query));
+            });
+            app.UseSwagger();
+            app.UseSwaggerUI();
+            app.UseCors("*");
 
         app.Run();
     }
