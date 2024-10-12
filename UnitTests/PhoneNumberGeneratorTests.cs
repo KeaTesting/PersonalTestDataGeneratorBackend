@@ -1,7 +1,6 @@
 ﻿using System;
 using Xunit;
 using PersonalTestDataGeneratorBackend;
-using PersonalTestDataGeneratorBackend.PersonalTestDataGeneratorBackend;
 namespace UnitTests
 {
     public class PhoneNumberGeneratorTests
@@ -16,8 +15,6 @@ namespace UnitTests
         //There has been used 2 boundary values test cases for the sequence of prexies, such as "344-349".
         //We have run 2 boundary tests on 5 entries in the list and have a final of 20 tests.
 
-        private readonly PhoneNumberGenerator _generator = new PhoneNumberGenerator();
-
         string[] validPrefixes = PhoneNumberGenerator.validPrefixes;
 
         //General structure test with Equivalence Partitioning.
@@ -27,10 +24,10 @@ namespace UnitTests
         public void GeneratedPhoneNumber_ShouldReturn8Digits()
         {
             // Act
-            string phoneNumber = _generator.GeneratePhoneNumber();
+            string PhoneNumber = PhoneNumberGenerator.GeneratePhoneNumber();
 
             // Assert
-            Assert.Equal(8, phoneNumber.Length);
+            Assert.Equal(8, PhoneNumber.Length);
         }
 
         //POSITIVE General structure test 2/3
@@ -39,20 +36,20 @@ namespace UnitTests
         {
 
             // Act
-            string phoneNumber = _generator.GeneratePhoneNumber();
+            string PhoneNumber = PhoneNumberGenerator.GeneratePhoneNumber();
 
             // Assert
             bool startsWithValidPrefix = false;
             foreach (var prefix in validPrefixes)
             {
-                if (phoneNumber.StartsWith(prefix))
+                if (PhoneNumber.StartsWith(prefix))
                 {
                     startsWithValidPrefix = true;
                     break;
                 }
             }
 
-            Assert.True(startsWithValidPrefix, $"Phone number does not start with a valid prefix. Generated: {phoneNumber}");
+            Assert.True(startsWithValidPrefix, $"Phone number does not start with a valid prefix. Generated: {PhoneNumber}");
         }
 
         //POSITIVE General structure test 3/3
@@ -60,10 +57,10 @@ namespace UnitTests
         public void GeneratedPhoneNumber_ShouldContainOnlyDigits()
         {
             // Act
-            string phoneNumber = _generator.GeneratePhoneNumber();
+            string PhoneNumber = PhoneNumberGenerator.GeneratePhoneNumber();
 
             // Assert
-            Assert.Matches(@"^\d+$", phoneNumber);
+            Assert.Matches(@"^\d+$", PhoneNumber);
         }
 
         //NEGATIVE General structure test 1/10

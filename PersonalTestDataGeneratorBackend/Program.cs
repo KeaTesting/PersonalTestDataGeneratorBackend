@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using PersonalTestDataGeneratorBackend.DB;
-using PersonalTestDataGeneratorBackend.Generators;
+using PersonalTestDataGeneratorBackend;
 using System;
 using System.IO;
 using System.Text.Json;
@@ -37,7 +37,7 @@ namespace PersonalTestDataGeneratorBackend
                 };
                 return PersonHelper.GeneratePersons(query, 1).First();
 
-            }); 
+            });
             app.MapGet("/name-gender", () =>
             {
                 var query = new PersonQuery()
@@ -144,10 +144,6 @@ namespace PersonalTestDataGeneratorBackend
                 return PersonHelper.GeneratePersons(query, n);
             });
 
-                var person = new Person();
-                //if(query.)
-                Console.WriteLine(JsonSerializer.Serialize(query));
-            });
             app.UseSwagger();
             app.UseSwaggerUI();
             app.UseCors("*");
