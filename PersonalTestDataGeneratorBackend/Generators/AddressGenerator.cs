@@ -1,4 +1,4 @@
-﻿namespace PersonalTestDataGeneratorBackend.PersonalTestDataGeneratorBackend
+﻿namespace PersonalTestDataGeneratorBackend.Generators
 {
     public class AddressGenerator
     {
@@ -31,10 +31,10 @@
             return letter.HasValue ? $"{number}{letter}" : number.ToString();
         }
 
-        //Floor. Either “st” or a number from 1 to 99
+        //Floor. Either “st” or a number from 1 to 29
         public string GenerateFloor()
         {
-            return random.Next(0, 2) == 0 ? "st" : random.Next(1, 30).ToString(); 
+            return random.Next(0, 2) == 0 ? "st" : random.Next(1, 30).ToString();
         }
 
         //Door. “th”, “mf”, “tv”, a number from 1 to 50, or a lowercase letter optionally followed by a dash, then followed by one to three numeric digits (e.g., c3, d-14)
