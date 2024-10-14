@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PersonalTestDataGeneratorBackend.DB;
 
@@ -11,9 +12,11 @@ using PersonalTestDataGeneratorBackend.DB;
 namespace PersonalTestDataGeneratorBackend.Migrations
 {
     [DbContext(typeof(GeneratorDB))]
-    partial class GeneratorDBModelSnapshot : ModelSnapshot
+    [Migration("20241014095759_AddedPostalCodeToDB")]
+    partial class AddedPostalCodeToDB
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
