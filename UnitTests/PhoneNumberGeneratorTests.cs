@@ -15,11 +15,23 @@ namespace UnitTests
         //There has been used 2 boundary values test cases for the sequence of prexies, such as "344-349".
         //We have run 2 boundary tests on 5 entries in the list and have a final of 20 tests.
 
-        string[] validPrefixes = PhoneNumberGenerator.validPrefixes;
+        string[] validPrefixes =
+        {
+        "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "40", "41", "42", "50", "51", "52", "53", "60", "61", "71", "81", "91", "92", "93",
+        "342", "344", "345", "346", "347", "348", "349", "356", "357", "359", "362", "365", "366", "389", "398",
+        "431", "441", "462", "466", "468", "472", "474", "476", "478", "485", "486", "488", "489", "493", "494",
+        "495", "496", "498", "499", "542", "543", "545", "551", "552", "556", "571", "572", "573", "574", "577",
+        "579", "584", "586", "587", "589", "597", "598", "627", "629", "641", "649", "658", "662", "663", "664",
+        "665", "667", "692", "693", "694", "697", "771", "772", "782", "783", "785", "786", "788", "789", "826",
+        "827", "829"
+    };
 
+
+        //*****************************************************
         //General structure test with Equivalence Partitioning.
+        //*****************************************************
 
-        //POSITIVE General structure test 1/3
+        //POSITIVE General structure test
         [Fact]
         public void GeneratedPhoneNumber_ShouldReturn8Digits()
         {
@@ -30,7 +42,7 @@ namespace UnitTests
             Assert.Equal(8, PhoneNumber.Length);
         }
 
-        //POSITIVE General structure test 2/3
+        //POSITIVE General structure test
         [Fact]
         public void GeneratedPhoneNumber_ShouldStartWithValidPrefix()
         {
@@ -52,7 +64,7 @@ namespace UnitTests
             Assert.True(startsWithValidPrefix, $"Phone number does not start with a valid prefix. Generated: {PhoneNumber}");
         }
 
-        //POSITIVE General structure test 3/3
+        //POSITIVE General structure test
         [Fact]
         public void GeneratedPhoneNumber_ShouldContainOnlyDigits()
         {
@@ -63,434 +75,96 @@ namespace UnitTests
             Assert.Matches(@"^\d+$", PhoneNumber);
         }
 
-        //NEGATIVE General structure test 1/10
-        [Fact]
-        public void InvalidPhoneNumber_WithAlphabeticalCharacters_ShouldFailDigitCheck()
-        {
-            // Arrange
-            string invalidPhoneNumber = "30AB5678";
 
+        //*********************************************************
+        //3-Boundary tests på individuelle entries i valid prefixes
+        //*********************************************************
+
+        //POSITIVE 3-Boundary inline test for valid prefixes
+        [Theory]
+        [InlineData("71")]
+        [InlineData("462")]
+        [InlineData("466")]
+        [InlineData("468")]
+        [InlineData("577")]
+        [InlineData("579")]
+        public void ValidPhoneNumber_ShouldStartWithValidPrefix(string validPrefix)
+        {
             // Act & Assert
-            Assert.DoesNotMatch(@"^\d+$", invalidPhoneNumber);
+            Assert.Contains(validPrefix, validPrefixes);
         }
 
-        //NEGATIVE General structure test 2/10
-        [Fact]
-        public void InvalidPhoneNumber_WithFloat_ShouldFailDigitCheck()
+        //NEGATIVE 3-Boundary inline test for invalid prefixes below valid range
+        [Theory]
+        [InlineData("70")]  // Below "71"
+        [InlineData("461")]  // Below "462"
+        [InlineData("465")]  // Below "466"
+        [InlineData("467")]  // Below "468"
+        [InlineData("576")]  // Below "577"
+        [InlineData("578")]  // Below "579"
+        public void InvalidPhoneNumber_WithPrefixBelowValidRange_ShouldFail(string invalidPrefix)
         {
-            // Arrange
-            string invalidPhoneNumber = "30.45678";
-
             // Act & Assert
-            Assert.DoesNotMatch(@"^\d+$", invalidPhoneNumber);
+            Assert.DoesNotContain(invalidPrefix, validPrefixes);
         }
 
-        //NEGATIVE General structure test 3/10
-        [Fact]
-        public void InvalidPhoneNumber_WithSpecialCharacters_ShouldFailDigitCheck()
+        //NEGATIVE 3-Boundary inline test for invalid prefixes above valid range
+        [Theory]
+        [InlineData("72")]  // Above "71"
+        [InlineData("463")]  // Above "462"
+        [InlineData("467")]  // Above "466"
+        [InlineData("469")]  // Above "468"
+        [InlineData("578")]  // Above "577"
+        [InlineData("580")]  // Above "579"
+        public void InvalidPhoneNumber_WithPrefixAboveValidRange_ShouldFail(string invalidPrefix)
         {
-            // Arrange
-            string invalidPhoneNumber = "30@#5678";
-
             // Act & Assert
-            Assert.DoesNotMatch(@"^\d+$", invalidPhoneNumber);
-        }
-
-        //NEGATIVE General structure test 4/10
-        [Fact]
-        public void InvalidPhoneNumber_WithKoreanCharacters_ShouldFailDigitCheck()
-        {
-            // Arrange
-            string invalidPhoneNumber = "30안녕하세요56";
-
-            // Act & Assert
-            Assert.DoesNotMatch(@"^\d+$", invalidPhoneNumber);
-        }
-
-        //NEGATIVE General structure test 5/10
-        [Fact]
-        public void InvalidPhoneNumber_WithJapaneseCharacters_ShouldFailDigitCheck()
-        {
-            // Arrange
-            string invalidPhoneNumber = "30カタカナ56";
-
-            // Act & Assert
-            Assert.DoesNotMatch(@"^\d+$", invalidPhoneNumber);
-        }
-
-        //NEGATIVE General structure test 6/10
-        [Fact]
-        public void InvalidPhoneNumber_WithChineseCharacters_ShouldFailDigitCheck()
-        {
-            // Arrange
-            string invalidPhoneNumber = "30你好567";
-
-            // Act & Assert
-            Assert.DoesNotMatch(@"^\d+$", invalidPhoneNumber);
-        }
-
-        //NEGATIVE General structure test 7/10
-        [Fact]
-        public void InvalidPhoneNumber_WithArabicCharacters_ShouldFailDigitCheck()
-        {
-            // Arrange
-            string invalidPhoneNumber = "30سلام567";
-
-            // Act & Assert
-            Assert.DoesNotMatch(@"^\d+$", invalidPhoneNumber);
-        }
-
-        //NEGATIVE General structure test 8/10
-        [Fact]
-        public void InvalidPhoneNumber_WithHindiCharacters_ShouldFailDigitCheck()
-        {
-            // Arrange
-            string invalidPhoneNumber = "30नमस्ते56";
-
-            // Act & Assert
-            Assert.DoesNotMatch(@"^\d+$", invalidPhoneNumber);
-        }
-
-        //NEGATIVE General structure test 9/10
-        [Fact]
-        public void InvalidPhoneNumber_WithTooManyDigits_ShouldFailLengthCheck()
-        {
-            // Arrange
-            string invalidPhoneNumber = "305678901";
-
-            // Act & Assert
-            Assert.NotEqual(8, invalidPhoneNumber.Length);
-        }
-
-        //NEGATIVE General structure test 10/10
-        [Fact]
-        public void InvalidPhoneNumber_WithTooFewDigits_ShouldFailLengthCheck()
-        {
-            // Arrange
-            string invalidPhoneNumber = "30567";
-
-            // Act & Assert
-            Assert.NotEqual(8, invalidPhoneNumber.Length);
+            Assert.DoesNotContain(invalidPrefix, validPrefixes);
         }
 
 
 
-        //3-Boundary tests
+        //***********************************************
+        // 2-Boundary tests for intervals in valid prefixes
+        //***********************************************
 
-
-        //POSITIVE 3-Boundary test 1/18 - Valid boundary for prefix '71'
-        [Fact]
-        public void ValidPhoneNumber_WithPrefix71_ShouldStartWithValidPrefix()
+        //POSITIVE 2-Boundary inline test for valid prefixes (lower, upper, and middle values)
+        [Theory]
+        [InlineData("20")]  // Lower boundary for interval 20-31
+        [InlineData("31")]  // Upper boundary for interval 20-31
+        [InlineData("26")]  // Middle value for interval 20-31
+        [InlineData("344")] // Lower boundary for interval 344-349
+        [InlineData("349")] // Upper boundary for interval 344-349
+        [InlineData("346")] // Middle value for interval 344-349
+        [InlineData("485")] // Lower boundary for interval 485-486
+        [InlineData("486")] // Upper boundary for interval 485-486
+        [InlineData("488")] // Lower boundary for interval 488-489
+        [InlineData("489")] // Upper boundary for interval 488-489
+        [InlineData("826")] // Lower boundary for interval 826-827
+        [InlineData("827")] // Upper boundary for interval 826-827
+        public void ValidPhoneNumber_WithValidBoundary_ShouldStartWithValidPrefix(string validPrefix)
         {
             // Act & Assert
-            Assert.Contains("71", PhoneNumberGenerator.validPrefixes);
+            Assert.Contains(validPrefix, validPrefixes);
         }
 
-        //NEGATIVE 3-Boundary test 2/18 - Invalid boundary below '71'
-        [Fact]
-        public void InvalidPhoneNumber_WithPrefixBelow71_ShouldFail()
+        //NEGATIVE 2-Boundary inline test for invalid prefixes (below and above valid range)
+        [Theory]
+        [InlineData("19")]  // Below 20-31
+        [InlineData("32")]  // Above 20-31
+        [InlineData("343")] // Below 344-349
+        [InlineData("350")] // Above 344-349
+        [InlineData("484")] // Below 485-486
+        [InlineData("487")] // Above 485-486
+        [InlineData("490")] // Above 488-489
+        [InlineData("825")] // Below 826-827
+        [InlineData("828")] // Above 826-827
+        public void InvalidPhoneNumber_WithInvalidBoundary_ShouldFail(string invalidPrefix)
         {
             // Act & Assert
-            Assert.DoesNotContain("70", PhoneNumberGenerator.validPrefixes);
+            Assert.DoesNotContain(invalidPrefix, validPrefixes);
         }
 
-        //NEGATIVE 3-Boundary test 3/18 - Invalid boundary above '71'
-        [Fact]
-        public void InvalidPhoneNumber_WithPrefixAbove71_ShouldFail()
-        {
-            // Act & Assert
-            Assert.DoesNotContain("72", PhoneNumberGenerator.validPrefixes);
-        }
-
-        //POSITIVE 3-Boundary test 4/18 - Valid boundary for prefix '462'
-        [Fact]
-        public void ValidPhoneNumber_WithPrefix462_ShouldStartWithValidPrefix()
-        {
-            // Act & Assert
-            Assert.Contains("462", PhoneNumberGenerator.validPrefixes);
-        }
-
-        //NEGATIVE 3-Boundary test 5/18 - Invalid boundary below '462'
-        [Fact]
-        public void InvalidPhoneNumber_WithPrefixBelow462_ShouldFail()
-        {
-            // Act & Assert
-            Assert.DoesNotContain("461", PhoneNumberGenerator.validPrefixes);
-        }
-
-        //NEGATIVE 3-Boundary test 6/18 - Invalid boundary above '462'
-        [Fact]
-        public void InvalidPhoneNumber_WithPrefixAbove462_ShouldFail()
-        {
-            // Act & Assert
-            Assert.DoesNotContain("463", PhoneNumberGenerator.validPrefixes);
-        }
-
-        //POSITIVE 3-Boundary test 7/18 - Valid boundary for prefix '466'
-        [Fact]
-        public void ValidPhoneNumber_WithPrefix466_ShouldStartWithValidPrefix()
-        {
-            // Act & Assert
-            Assert.Contains("466", PhoneNumberGenerator.validPrefixes);
-        }
-
-        //NEGATIVE 3-Boundary test 8/18 - Invalid boundary below '466'
-        [Fact]
-        public void InvalidPhoneNumber_WithPrefixBelow466_ShouldFail()
-        {
-            // Act & Assert
-            Assert.DoesNotContain("465", PhoneNumberGenerator.validPrefixes);
-        }
-
-        //NEGATIVE 3-Boundary test 9/18 - Invalid boundary above '466'
-        [Fact]
-        public void InvalidPhoneNumber_WithPrefixAbove466_ShouldFail()
-        {
-            // Act & Assert
-            Assert.DoesNotContain("467", PhoneNumberGenerator.validPrefixes);
-        }
-
-        //POSITIVE 3-Boundary test 10/18 - Valid boundary for prefix '468'
-        [Fact]
-        public void ValidPhoneNumber_WithPrefix468_ShouldStartWithValidPrefix()
-        {
-            // Act & Assert
-            Assert.Contains("468", PhoneNumberGenerator.validPrefixes);
-        }
-
-        //NEGATIVE 3-Boundary test 11/18 - Invalid boundary below '468'
-        [Fact]
-        public void InvalidPhoneNumber_WithPrefixBelow468_ShouldFail()
-        {
-            // Act & Assert
-            Assert.DoesNotContain("467", PhoneNumberGenerator.validPrefixes);
-        }
-
-        //NEGATIVE 3-Boundary test 12/18 - Invalid boundary above '468'
-        [Fact]
-        public void InvalidPhoneNumber_WithPrefixAbove468_ShouldFail()
-        {
-            // Act & Assert
-            Assert.DoesNotContain("469", PhoneNumberGenerator.validPrefixes);
-        }
-
-        //POSITIVE 3-Boundary test 13/18 - Valid boundary for prefix '577'
-        [Fact]
-        public void ValidPhoneNumber_WithPrefix577_ShouldStartWithValidPrefix()
-        {
-            // Act & Assert
-            Assert.Contains("577", PhoneNumberGenerator.validPrefixes);
-        }
-
-        //NEGATIVE 3-Boundary test 14/18 - Invalid boundary below '577'
-        [Fact]
-        public void InvalidPhoneNumber_WithPrefixBelow577_ShouldFail()
-        {
-            // Act & Assert
-            Assert.DoesNotContain("576", PhoneNumberGenerator.validPrefixes);
-        }
-
-        //NEGATIVE 3-Boundary test 15/18 - Invalid boundary above '577'
-        [Fact]
-        public void InvalidPhoneNumber_WithPrefixAbove577_ShouldFail()
-        {
-            // Act & Assert
-            Assert.DoesNotContain("578", PhoneNumberGenerator.validPrefixes);
-        }
-
-        //POSITIVE 3-Boundary test 16/18 - Valid boundary for prefix '579'
-        [Fact]
-        public void ValidPhoneNumber_WithPrefix579_ShouldStartWithValidPrefix()
-        {
-            // Act & Assert
-            Assert.Contains("579", PhoneNumberGenerator.validPrefixes);
-        }
-
-        //NEGATIVE 3-Boundary test 17/18 - Invalid boundary below '579'
-        [Fact]
-        public void InvalidPhoneNumber_WithPrefixBelow579_ShouldFail()
-        {
-            // Act & Assert
-            Assert.DoesNotContain("578", PhoneNumberGenerator.validPrefixes);
-        }
-
-        //NEGATIVE 3-Boundary test 18/18 - Invalid boundary above '579'
-        [Fact]
-        public void InvalidPhoneNumber_WithPrefixAbove579_ShouldFail()
-        {
-            // Act & Assert
-            Assert.DoesNotContain("580", PhoneNumberGenerator.validPrefixes);
-        }
-
-
-
-
-        //2-Boundary test
-
-        // Interval: 20-31
-        //POSITIVE 2-Boundary test 1/20 - Valid lower boundary for interval '20-31'
-        [Fact]
-        public void ValidPhoneNumber_WithPrefix20_ShouldStartWithValidPrefix()
-        {
-            // Act & Assert
-            Assert.Contains("20", PhoneNumberGenerator.validPrefixes);
-        }
-
-        //POSITIVE 2-Boundary test 2/20 - Valid upper boundary for interval '20-31'
-        [Fact]
-        public void ValidPhoneNumber_WithPrefix31_ShouldStartWithValidPrefix()
-        {
-            // Act & Assert
-            Assert.Contains("31", PhoneNumberGenerator.validPrefixes);
-        }
-
-        //NEGATIVE 2-Boundary test 3/20 - Invalid boundary below '20'
-        [Fact]
-        public void InvalidPhoneNumber_WithPrefixBelow20_ShouldFail()
-        {
-            // Act & Assert
-            Assert.DoesNotContain("19", PhoneNumberGenerator.validPrefixes);
-        }
-
-        //NEGATIVE 2-Boundary test 4/20 - Invalid boundary above '31'
-        [Fact]
-        public void InvalidPhoneNumber_WithPrefixAbove31_ShouldFail()
-        {
-            // Act & Assert
-            Assert.DoesNotContain("32", PhoneNumberGenerator.validPrefixes);
-        }
-
-        // Interval: 344-349
-        //POSITIVE 2-Boundary test 5/20 - Valid lower boundary for interval '344-349'
-        [Fact]
-        public void ValidPhoneNumber_WithPrefix344_ShouldStartWithValidPrefix()
-        {
-            // Act & Assert
-            Assert.Contains("344", PhoneNumberGenerator.validPrefixes);
-        }
-
-        //POSITIVE 2-Boundary test 6/20 - Valid upper boundary for interval '344-349'
-        [Fact]
-        public void ValidPhoneNumber_WithPrefix349_ShouldStartWithValidPrefix()
-        {
-            // Act & Assert
-            Assert.Contains("349", PhoneNumberGenerator.validPrefixes);
-        }
-
-        //NEGATIVE 2-Boundary test 7/20 - Invalid boundary below '344'
-        [Fact]
-        public void InvalidPhoneNumber_WithPrefixBelow344_ShouldFail()
-        {
-            // Act & Assert
-            Assert.DoesNotContain("343", PhoneNumberGenerator.validPrefixes);
-        }
-
-        //NEGATIVE 2-Boundary test 8/20 - Invalid boundary above '349'
-        [Fact]
-        public void InvalidPhoneNumber_WithPrefixAbove349_ShouldFail()
-        {
-            // Act & Assert
-            Assert.DoesNotContain("350", PhoneNumberGenerator.validPrefixes);
-        }
-
-        // Interval: 485-486
-        //POSITIVE 2-Boundary test 9/20 - Valid lower boundary for interval '485-486'
-        [Fact]
-        public void ValidPhoneNumber_WithPrefix485_ShouldStartWithValidPrefix()
-        {
-            // Act & Assert
-            Assert.Contains("485", PhoneNumberGenerator.validPrefixes);
-        }
-
-        //POSITIVE 2-Boundary test 10/20 - Valid upper boundary for interval '485-486'
-        [Fact]
-        public void ValidPhoneNumber_WithPrefix486_ShouldStartWithValidPrefix()
-        {
-            // Act & Assert
-            Assert.Contains("486", PhoneNumberGenerator.validPrefixes);
-        }
-
-        //NEGATIVE 2-Boundary test 11/20 - Invalid boundary below '485'
-        [Fact]
-        public void InvalidPhoneNumber_WithPrefixBelow485_ShouldFail()
-        {
-            // Act & Assert
-            Assert.DoesNotContain("484", PhoneNumberGenerator.validPrefixes);
-        }
-
-        //NEGATIVE 2-Boundary test 12/20 - Invalid boundary above '486'
-        [Fact]
-        public void InvalidPhoneNumber_WithPrefixAbove486_ShouldFail()
-        {
-            // Act & Assert
-            Assert.DoesNotContain("487", PhoneNumberGenerator.validPrefixes);
-        }
-
-        // Interval: 488-489
-        //POSITIVE 2-Boundary test 13/20 - Valid lower boundary for interval '488-489'
-        [Fact]
-        public void ValidPhoneNumber_WithPrefix488_ShouldStartWithValidPrefix()
-        {
-            // Act & Assert
-            Assert.Contains("488", PhoneNumberGenerator.validPrefixes);
-        }
-
-        //POSITIVE 2-Boundary test 14/20 - Valid upper boundary for interval '488-489'
-        [Fact]
-        public void ValidPhoneNumber_WithPrefix489_ShouldStartWithValidPrefix()
-        {
-            // Act & Assert
-            Assert.Contains("489", PhoneNumberGenerator.validPrefixes);
-        }
-
-        //NEGATIVE 2-Boundary test 15/20 - Invalid boundary below '488'
-        [Fact]
-        public void InvalidPhoneNumber_WithPrefixBelow488_ShouldFail()
-        {
-            // Act & Assert
-            Assert.DoesNotContain("487", PhoneNumberGenerator.validPrefixes);
-        }
-
-        //NEGATIVE 2-Boundary test 16/20 - Invalid boundary above '489'
-        [Fact]
-        public void InvalidPhoneNumber_WithPrefixAbove489_ShouldFail()
-        {
-            // Act & Assert
-            Assert.DoesNotContain("490", PhoneNumberGenerator.validPrefixes);
-        }
-
-        // Interval: 826-827
-        //POSITIVE 2-Boundary test 17/20 - Valid lower boundary for interval '826-827'
-        [Fact]
-        public void ValidPhoneNumber_WithPrefix826_ShouldStartWithValidPrefix()
-        {
-            // Act & Assert
-            Assert.Contains("826", PhoneNumberGenerator.validPrefixes);
-        }
-
-        //POSITIVE 2-Boundary test 18/20 - Valid upper boundary for interval '826-827'
-        [Fact]
-        public void ValidPhoneNumber_WithPrefix827_ShouldStartWithValidPrefix()
-        {
-            // Act & Assert
-            Assert.Contains("827", PhoneNumberGenerator.validPrefixes);
-        }
-
-        //NEGATIVE 2-Boundary test 19/20 - Invalid boundary below '826'
-        [Fact]
-        public void InvalidPhoneNumber_WithPrefixBelow826_ShouldFail()
-        {
-            // Act & Assert
-            Assert.DoesNotContain("825", PhoneNumberGenerator.validPrefixes);
-        }
-
-        //NEGATIVE 2-Boundary test 20/20 - Invalid boundary above '827'
-        [Fact]
-        public void InvalidPhoneNumber_WithPrefixAbove827_ShouldFail()
-        {
-            // Act & Assert
-            Assert.DoesNotContain("828", PhoneNumberGenerator.validPrefixes);
-        }
 
 
     }
