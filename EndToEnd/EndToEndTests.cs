@@ -12,169 +12,155 @@ namespace EndToEnd
     public class EndToEndTests
     {
 
-        private IWebDriver Driver()
-        {
+        private readonly IWebDriver _driver;
 
+        public EndToEndTests()
+        {
             // Initialize the Chrome WebDriver
-            IWebDriver driver = new ChromeDriver();
+            _driver = new ChromeDriver();
 
             // Open the website
-            driver.Navigate().GoToUrl("http://127.0.0.1:5500");
+            _driver.Navigate().GoToUrl("http://127.0.0.1:5500");
 
             // Set window size
-            driver.Manage().Window.Size = new System.Drawing.Size(949, 743);
+            _driver.Manage().Window.Size = new System.Drawing.Size(949, 743);
 
-            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromMilliseconds(3000);
-
-            return driver;
+            _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromMilliseconds(3000);
         }
 
 
         [Fact]
         public void ReturnAFakeCPR()
         {
-            IWebDriver driver = Driver();
-
             //change to partial generation
-            IWebElement partialGenerationElement = driver.FindElement(By.CssSelector("#partialOptions > input"));
+            IWebElement partialGenerationElement = _driver.FindElement(By.CssSelector("#partialOptions > input"));
             partialGenerationElement.Click();
 
             // Find the element by CSS selector and click
-            IWebElement submitButton = driver.FindElement(By.CssSelector("#submit > input"));
+            IWebElement submitButton = _driver.FindElement(By.CssSelector("#submit > input"));
             submitButton.Click();
 
             //assigning the element to a variable
-            IWebElement cprElement = driver.FindElement(By.CssSelector(".cpr"));
+            IWebElement cprElement = _driver.FindElement(By.CssSelector(".cpr"));
 
             // Assert that the element with the id "cpr" is present
             Assert.NotNull(cprElement);
-            driver.Close();
+            _driver.Close();
         }
 
         [Fact]
         public void Return_a_fake_first_name_last_name_and_gender()
         {
 
-            var driver = Driver();
-
-            IWebElement partialGenerationElement = driver.FindElement(By.CssSelector("#partialOptions > input"));
+            IWebElement partialGenerationElement = _driver.FindElement(By.CssSelector("#partialOptions > input"));
             partialGenerationElement.Click();
 
             //Selecting a value from the dropdown
-            SelectElement selectElement = new SelectElement(driver.FindElement(By.CssSelector("#cmbPartialOptions")));
+            SelectElement selectElement = new SelectElement(_driver.FindElement(By.CssSelector("#cmbPartialOptions")));
             selectElement.SelectByValue("name-gender");
 
-            IWebElement submitButton = driver.FindElement(By.CssSelector("#submit > input"));
+            IWebElement submitButton = _driver.FindElement(By.CssSelector("#submit > input"));
             submitButton.Click();
 
             //assigning the element to a variable
-            IWebElement firstNameElement = driver.FindElement(By.CssSelector(".firstName"));
-            IWebElement lastNameElement = driver.FindElement(By.CssSelector(".lastName"));
-            IWebElement dob = driver.FindElement(By.CssSelector(".dob"));
+            IWebElement firstNameElement = _driver.FindElement(By.CssSelector(".firstName"));
+            IWebElement lastNameElement = _driver.FindElement(By.CssSelector(".lastName"));
+            IWebElement dob = _driver.FindElement(By.CssSelector(".dob"));
 
             Assert.NotNull(firstNameElement);
             Assert.NotNull(lastNameElement);
             Assert.NotNull(dob);
 
-            driver.Close();
+            _driver.Close();
         }
 
         [Fact]
         public void Return_a_fake_CPR_first_name_last_name_and_gender()
         {
-            var driver = Driver();
-
-            IWebElement partialGenerationElement = driver.FindElement(By.CssSelector("#partialOptions > input"));
+            IWebElement partialGenerationElement = _driver.FindElement(By.CssSelector("#partialOptions > input"));
             partialGenerationElement.Click();
 
             //Selecting a value from the dropdown
-            SelectElement selectElement = new SelectElement(driver.FindElement(By.CssSelector("#cmbPartialOptions")));
+            SelectElement selectElement = new SelectElement(_driver.FindElement(By.CssSelector("#cmbPartialOptions")));
             selectElement.SelectByValue("cpr-name-gender");
 
-            IWebElement submitButton = driver.FindElement(By.CssSelector("#submit > input"));
+            IWebElement submitButton = _driver.FindElement(By.CssSelector("#submit > input"));
             submitButton.Click();
 
-            IWebElement firstNameElement = driver.FindElement(By.CssSelector(".firstName"));
-            IWebElement lastNameElement = driver.FindElement(By.CssSelector(".lastName"));
-            IWebElement genderElement = driver.FindElement(By.CssSelector(".gender"));
-            IWebElement cprElement = driver.FindElement(By.CssSelector(".cpr"));
+            IWebElement firstNameElement = _driver.FindElement(By.CssSelector(".firstName"));
+            IWebElement lastNameElement = _driver.FindElement(By.CssSelector(".lastName"));
+            IWebElement genderElement = _driver.FindElement(By.CssSelector(".gender"));
+            IWebElement cprElement = _driver.FindElement(By.CssSelector(".cpr"));
 
             Assert.NotNull(firstNameElement);
             Assert.NotNull(lastNameElement);
             Assert.NotNull(genderElement);
             Assert.NotNull(cprElement);
 
-            driver.Close();
+            _driver.Close();
         }
 
         [Fact]
         public void Return_a_fake_CPR_first_name_last_name_and_gender_DOB()
         {
 
-            var driver = Driver();
-
-            IWebElement partialGenerationElement = driver.FindElement(By.CssSelector("#partialOptions > input"));
+            IWebElement partialGenerationElement = _driver.FindElement(By.CssSelector("#partialOptions > input"));
             partialGenerationElement.Click();
 
             //Selecting a value from the dropdown
-            SelectElement selectElement = new SelectElement(driver.FindElement(By.CssSelector("#cmbPartialOptions")));
+            SelectElement selectElement = new SelectElement(_driver.FindElement(By.CssSelector("#cmbPartialOptions")));
             selectElement.SelectByValue("cpr-name-gender-dob");
 
-            IWebElement submitButton = driver.FindElement(By.CssSelector("#submit > input"));
+            IWebElement submitButton = _driver.FindElement(By.CssSelector("#submit > input"));
             submitButton.Click();
 
             //assigning the element to a variable
-            IWebElement cprElement = driver.FindElement(By.CssSelector(".cpr"));
-            IWebElement firstNameElement = driver.FindElement(By.CssSelector(".firstName"));
-            IWebElement lastNameElement = driver.FindElement(By.CssSelector(".lastName"));
-            IWebElement dob = driver.FindElement(By.CssSelector(".dob"));
+            IWebElement cprElement = _driver.FindElement(By.CssSelector(".cpr"));
+            IWebElement firstNameElement = _driver.FindElement(By.CssSelector(".firstName"));
+            IWebElement lastNameElement = _driver.FindElement(By.CssSelector(".lastName"));
+            IWebElement dob = _driver.FindElement(By.CssSelector(".dob"));
 
             Assert.NotNull(cprElement);
             Assert.NotNull(firstNameElement);
             Assert.NotNull(lastNameElement);
             Assert.NotNull(dob);
 
-
-            driver.Close();
+            _driver.Close();
         }
 
         [Fact]
         public void Return_a_fake_Phone_Number()
         {
-            var driver = Driver();
-
-            IWebElement partialGenerationElement = driver.FindElement(By.CssSelector("#partialOptions > input"));
+            IWebElement partialGenerationElement = _driver.FindElement(By.CssSelector("#partialOptions > input"));
             partialGenerationElement.Click();
 
             //Selecting a value from the dropdown
-            SelectElement selectElement = new SelectElement(driver.FindElement(By.CssSelector("#cmbPartialOptions")));
+            SelectElement selectElement = new SelectElement(_driver.FindElement(By.CssSelector("#cmbPartialOptions")));
             selectElement.SelectByValue("phone");
 
-            IWebElement submitButton = driver.FindElement(By.CssSelector("#submit > input"));
+            IWebElement submitButton = _driver.FindElement(By.CssSelector("#submit > input"));
             submitButton.Click();
 
             //assigning the element to a variable
-            IWebElement phoneElement = driver.FindElement(By.CssSelector(".phoneNumber"));
+            IWebElement phoneElement = _driver.FindElement(By.CssSelector(".phoneNumber"));
 
             Assert.NotNull(phoneElement);
 
-            driver.Close();
+            _driver.Close();
         }
 
         [Fact]
         public void Return_Fake_Person()
         {
-            var driver = Driver();
-
-            IWebElement submitButton = driver.FindElement(By.CssSelector("#submit > input"));
+            IWebElement submitButton = _driver.FindElement(By.CssSelector("#submit > input"));
             submitButton.Click();
 
-            IWebElement cprElement = driver.FindElement(By.CssSelector(".cpr"));
-            IWebElement firstNameElement = driver.FindElement(By.CssSelector(".firstName"));
-            IWebElement lastNameElement = driver.FindElement(By.CssSelector(".lastName"));
-            IWebElement genderElement = driver.FindElement(By.CssSelector(".gender"));
-            IWebElement dob = driver.FindElement(By.CssSelector(".dob"));
-            IWebElement phoneElement = driver.FindElement(By.CssSelector(".phoneNumber"));
+            IWebElement cprElement = _driver.FindElement(By.CssSelector(".cpr"));
+            IWebElement firstNameElement = _driver.FindElement(By.CssSelector(".firstName"));
+            IWebElement lastNameElement = _driver.FindElement(By.CssSelector(".lastName"));
+            IWebElement genderElement = _driver.FindElement(By.CssSelector(".gender"));
+            IWebElement dob = _driver.FindElement(By.CssSelector(".dob"));
+            IWebElement phoneElement = _driver.FindElement(By.CssSelector(".phoneNumber"));
 
             Assert.NotNull(cprElement);
             Assert.NotNull(firstNameElement);
@@ -183,7 +169,7 @@ namespace EndToEnd
             Assert.NotNull(dob);
             Assert.NotNull(phoneElement);
 
-            driver.Close();
+            _driver.Close();
         }
 
         [InlineData(2)]
@@ -192,20 +178,18 @@ namespace EndToEnd
         [Theory]
         public void Return_More_Than_One_Fake_Persons(int amount)
         {
-            var driver = Driver();
+            _driver.FindElement(By.CssSelector("#txtNumberPersons")).Clear();
+            _driver.FindElement(By.CssSelector("#txtNumberPersons")).SendKeys(amount.ToString());
 
-            driver.FindElement(By.CssSelector("#txtNumberPersons")).Clear();
-            driver.FindElement(By.CssSelector("#txtNumberPersons")).SendKeys(amount.ToString());
-
-            IWebElement submitButton = driver.FindElement(By.CssSelector("#submit > input"));
+            IWebElement submitButton = _driver.FindElement(By.CssSelector("#submit > input"));
             submitButton.Click();
 
-            IReadOnlyCollection<IWebElement> cprElements = driver.FindElements(By.CssSelector(".cpr"));
-            IReadOnlyCollection<IWebElement> firstNameElements = driver.FindElements(By.CssSelector(".firstName"));
-            IReadOnlyCollection<IWebElement> lastNameElements = driver.FindElements(By.CssSelector(".lastName"));
-            IReadOnlyCollection<IWebElement> genderElement = driver.FindElements(By.CssSelector(".gender"));
-            IReadOnlyCollection<IWebElement> dob = driver.FindElements(By.CssSelector(".dob"));
-            IReadOnlyCollection<IWebElement> phoneElement = driver.FindElements(By.CssSelector(".phoneNumber"));
+            IReadOnlyCollection<IWebElement> cprElements = _driver.FindElements(By.CssSelector(".cpr"));
+            IReadOnlyCollection<IWebElement> firstNameElements = _driver.FindElements(By.CssSelector(".firstName"));
+            IReadOnlyCollection<IWebElement> lastNameElements = _driver.FindElements(By.CssSelector(".lastName"));
+            IReadOnlyCollection<IWebElement> genderElement = _driver.FindElements(By.CssSelector(".gender"));
+            IReadOnlyCollection<IWebElement> dob = _driver.FindElements(By.CssSelector(".dob"));
+            IReadOnlyCollection<IWebElement> phoneElement = _driver.FindElements(By.CssSelector(".phoneNumber"));
 
             Assert.Equal(amount, cprElements.Count);
             Assert.Equal(amount, firstNameElements.Count);
@@ -214,7 +198,7 @@ namespace EndToEnd
             Assert.Equal(amount, dob.Count);
             Assert.Equal(amount, phoneElement.Count);
 
-            driver.Close();
+            _driver.Close();
         }
     }
 }
