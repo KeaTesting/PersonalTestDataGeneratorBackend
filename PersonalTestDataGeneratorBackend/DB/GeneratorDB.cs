@@ -8,5 +8,7 @@ namespace PersonalTestDataGeneratorBackend.DB
 
         public DbSet<Person> Persons { get; set; }
 
+        public DbSet<PostalCode> PostalCodes { get; set; }
+
     }
 }
