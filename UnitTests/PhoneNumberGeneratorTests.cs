@@ -59,7 +59,7 @@ namespace UnitTests
                 }
             }
 
-            Assert.True(startsWithValidPrefix, $"Phone number does not start with a valid prefix. Generated: {PhoneNumber}");
+            Assert.True(startsWithValidPrefix, $"Phone number does not start with a valid prefix. Generated: {phoneNumber}");
         }
 
         //POSITIVE General structure test
