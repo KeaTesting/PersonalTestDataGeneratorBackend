@@ -34,10 +34,10 @@ namespace UnitTests
         public void GeneratedPhoneNumber_ShouldReturn8Digits()
         {
             // Act
-            string PhoneNumber = PhoneNumberGenerator.GeneratePhoneNumber();
+            string phoneNumber = PhoneNumberGenerator.GeneratePhoneNumber();
 
             // Assert
-            Assert.Equal(8, PhoneNumber.Length);
+            Assert.Equal(8, phoneNumber.Length);
         }
 
         //POSITIVE General structure test
@@ -46,13 +46,13 @@ namespace UnitTests
         {
 
             // Act
-            string PhoneNumber = PhoneNumberGenerator.GeneratePhoneNumber();
+            string phoneNumber = PhoneNumberGenerator.GeneratePhoneNumber();
 
             // Assert
             bool startsWithValidPrefix = false;
             foreach (var prefix in validPrefixes)
             {
-                if (PhoneNumber.StartsWith(prefix))
+                if (phoneNumber.StartsWith(prefix))
                 {
                     startsWithValidPrefix = true;
                     break;
@@ -67,10 +67,10 @@ namespace UnitTests
         public void GeneratedPhoneNumber_ShouldContainOnlyDigits()
         {
             // Act
-            string PhoneNumber = PhoneNumberGenerator.GeneratePhoneNumber();
+            string phoneNumber = PhoneNumberGenerator.GeneratePhoneNumber();
 
             // Assert
-            Assert.Matches(@"^\d+$", PhoneNumber);
+            Assert.Matches(@"^\d+$", phoneNumber);
         }
 
 
