@@ -24,6 +24,8 @@ namespace EndToEnd
             // Set window size
             driver.Manage().Window.Size = new System.Drawing.Size(949, 743);
 
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromMilliseconds(3000);
+
             return driver;
         }
 
@@ -41,12 +43,8 @@ namespace EndToEnd
             IWebElement submitButton = driver.FindElement(By.CssSelector("#submit > input"));
             submitButton.Click();
 
-            // Wait for the element with the id "cpr" to be visible
-            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(2));
-
-
             //assigning the element to a variable
-            IWebElement cprElement = wait.Until(driver => driver.FindElement(By.CssSelector(".cpr")));
+            IWebElement cprElement = driver.FindElement(By.CssSelector(".cpr"));
 
             // Assert that the element with the id "cpr" is present
             Assert.NotNull(cprElement);
@@ -69,14 +67,10 @@ namespace EndToEnd
             IWebElement submitButton = driver.FindElement(By.CssSelector("#submit > input"));
             submitButton.Click();
 
-
-            // Wait for the element with the id "cpr" to be visible
-            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(2));
-
             //assigning the element to a variable
-            IWebElement firstNameElement = wait.Until(driver => driver.FindElement(By.CssSelector(".firstName")));
-            IWebElement lastNameElement = wait.Until(driver => driver.FindElement(By.CssSelector(".lastName")));
-            IWebElement dob = wait.Until(driver => driver.FindElement(By.CssSelector(".dob")));
+            IWebElement firstNameElement = driver.FindElement(By.CssSelector(".firstName"));
+            IWebElement lastNameElement = driver.FindElement(By.CssSelector(".lastName"));
+            IWebElement dob = driver.FindElement(By.CssSelector(".dob"));
 
             Assert.NotNull(firstNameElement);
             Assert.NotNull(lastNameElement);
@@ -100,13 +94,10 @@ namespace EndToEnd
             IWebElement submitButton = driver.FindElement(By.CssSelector("#submit > input"));
             submitButton.Click();
 
-            // Wait for the element with the id "cpr" to be visible
-            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(2));
-
-            IWebElement firstNameElement = wait.Until(driver => driver.FindElement(By.CssSelector(".firstName")));
-            IWebElement lastNameElement = wait.Until(driver => driver.FindElement(By.CssSelector(".lastName")));
-            IWebElement genderElement = wait.Until(driver => driver.FindElement(By.CssSelector(".gender")));
-            IWebElement cprElement = wait.Until(driver => driver.FindElement(By.CssSelector(".cpr")));
+            IWebElement firstNameElement = driver.FindElement(By.CssSelector(".firstName"));
+            IWebElement lastNameElement = driver.FindElement(By.CssSelector(".lastName"));
+            IWebElement genderElement = driver.FindElement(By.CssSelector(".gender"));
+            IWebElement cprElement = driver.FindElement(By.CssSelector(".cpr"));
 
             Assert.NotNull(firstNameElement);
             Assert.NotNull(lastNameElement);
@@ -132,14 +123,11 @@ namespace EndToEnd
             IWebElement submitButton = driver.FindElement(By.CssSelector("#submit > input"));
             submitButton.Click();
 
-            // Wait for the element with the id "cpr" to be visible
-            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(2));
-
             //assigning the element to a variable
-            IWebElement cprElement = wait.Until(driver => driver.FindElement(By.CssSelector(".cpr")));
-            IWebElement firstNameElement = wait.Until(driver => driver.FindElement(By.CssSelector(".firstName")));
-            IWebElement lastNameElement = wait.Until(driver => driver.FindElement(By.CssSelector(".lastName")));
-            IWebElement dob = wait.Until(driver => driver.FindElement(By.CssSelector(".dob")));
+            IWebElement cprElement = driver.FindElement(By.CssSelector(".cpr"));
+            IWebElement firstNameElement = driver.FindElement(By.CssSelector(".firstName"));
+            IWebElement lastNameElement = driver.FindElement(By.CssSelector(".lastName"));
+            IWebElement dob = driver.FindElement(By.CssSelector(".dob"));
 
             Assert.NotNull(cprElement);
             Assert.NotNull(firstNameElement);
@@ -165,12 +153,8 @@ namespace EndToEnd
             IWebElement submitButton = driver.FindElement(By.CssSelector("#submit > input"));
             submitButton.Click();
 
-            // Wait for the element with the id "cpr" to be visible
-            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(2));
-
             //assigning the element to a variable
-            IWebElement phoneElement = wait.Until(driver => driver.FindElement(By.CssSelector(".phoneNumber")));
-
+            IWebElement phoneElement = driver.FindElement(By.CssSelector(".phoneNumber"));
 
             Assert.NotNull(phoneElement);
 
@@ -185,15 +169,12 @@ namespace EndToEnd
             IWebElement submitButton = driver.FindElement(By.CssSelector("#submit > input"));
             submitButton.Click();
 
-            // Wait for the element with the id "cpr" to be visible
-            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(2));
-
-            IWebElement cprElement = wait.Until(driver => driver.FindElement(By.CssSelector(".cpr")));
-            IWebElement firstNameElement = wait.Until(driver => driver.FindElement(By.CssSelector(".firstName")));
-            IWebElement lastNameElement = wait.Until(driver => driver.FindElement(By.CssSelector(".lastName")));
-            IWebElement genderElement = wait.Until(driver => driver.FindElement(By.CssSelector(".gender")));
-            IWebElement dob = wait.Until(driver => driver.FindElement(By.CssSelector(".dob")));
-            IWebElement phoneElement = wait.Until(driver => driver.FindElement(By.CssSelector(".phoneNumber")));
+            IWebElement cprElement = driver.FindElement(By.CssSelector(".cpr"));
+            IWebElement firstNameElement = driver.FindElement(By.CssSelector(".firstName"));
+            IWebElement lastNameElement = driver.FindElement(By.CssSelector(".lastName"));
+            IWebElement genderElement = driver.FindElement(By.CssSelector(".gender"));
+            IWebElement dob = driver.FindElement(By.CssSelector(".dob"));
+            IWebElement phoneElement = driver.FindElement(By.CssSelector(".phoneNumber"));
 
             Assert.NotNull(cprElement);
             Assert.NotNull(firstNameElement);
@@ -202,12 +183,10 @@ namespace EndToEnd
             Assert.NotNull(dob);
             Assert.NotNull(phoneElement);
 
-
+            driver.Close();
         }
 
-
-        //Ved ikke hvordan jeg skal gøre det her. T_T
-/*        [InlineData(2)]
+        [InlineData(2)]
         [InlineData(10)]
         [InlineData(100)]
         [Theory]
@@ -215,33 +194,18 @@ namespace EndToEnd
         {
             var driver = Driver();
 
-
             driver.FindElement(By.CssSelector("#txtNumberPersons")).Clear();
             driver.FindElement(By.CssSelector("#txtNumberPersons")).SendKeys(amount.ToString());
 
             IWebElement submitButton = driver.FindElement(By.CssSelector("#submit > input"));
             submitButton.Click();
 
-            // Wait for the element with the id "cpr" to be visible
-            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(200));
-
-
-
-
-            IReadOnlyCollection<IWebElement> cprElements = wait.Until(driver => driver.FindElements(By.CssSelector(".cpr")));
-            IReadOnlyCollection<IWebElement> firstNameElements = wait.Until(driver => driver.FindElements(By.CssSelector(".firstName")));
-            IReadOnlyCollection<IWebElement> lastNameElements = wait.Until(driver => driver.FindElements(By.CssSelector(".lastName")));
-            IReadOnlyCollection<IWebElement> genderElement = wait.Until(driver => driver.FindElements(By.CssSelector(".gender")));
-            IReadOnlyCollection<IWebElement> dob = wait.Until(driver => driver.FindElements(By.CssSelector(".dob")));
-            IReadOnlyCollection<IWebElement> phoneElement = wait.Until(driver => driver.FindElements(By.CssSelector(".phoneNumber")));
-
-            // Wait for the collections to have data
-            wait.Until(driver => cprElements.Count > 0);
-            wait.Until(driver => firstNameElements.Count > 0);
-            wait.Until(driver => lastNameElements.Count > 0);
-            wait.Until(driver => genderElement.Count > 0);
-            wait.Until(driver => dob.Count > 0);
-            wait.Until(driver => phoneElement.Count > 0);
+            IReadOnlyCollection<IWebElement> cprElements = driver.FindElements(By.CssSelector(".cpr"));
+            IReadOnlyCollection<IWebElement> firstNameElements = driver.FindElements(By.CssSelector(".firstName"));
+            IReadOnlyCollection<IWebElement> lastNameElements = driver.FindElements(By.CssSelector(".lastName"));
+            IReadOnlyCollection<IWebElement> genderElement = driver.FindElements(By.CssSelector(".gender"));
+            IReadOnlyCollection<IWebElement> dob = driver.FindElements(By.CssSelector(".dob"));
+            IReadOnlyCollection<IWebElement> phoneElement = driver.FindElements(By.CssSelector(".phoneNumber"));
 
             Assert.Equal(amount, cprElements.Count);
             Assert.Equal(amount, firstNameElements.Count);
@@ -250,9 +214,7 @@ namespace EndToEnd
             Assert.Equal(amount, dob.Count);
             Assert.Equal(amount, phoneElement.Count);
 
-
-
-            //driver.Close();
-        }*/
+            driver.Close();
+        }
     }
 }
