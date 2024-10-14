@@ -7,13 +7,11 @@ namespace UnitTests
     {
 
         //For the tests here, Black box test design technique has been used.
-        //First up there are tests that make sure the general structure should work. These has been ordered by Equivalence Partitioning.
+        //First up there are tests that make sure the general structure should work.
 
-        //Then lastly the Boundary Value Analysis tests.
-        //There has been used 3 boundary values test cases for the single prefix entries, such as "441".
-        //We have run 3 boundary tests on 6 entries in the list and have a final of 18 tests.
-        //There has been used 2 boundary values test cases for the sequence of prexies, such as "344-349".
-        //We have run 2 boundary tests on 5 entries in the list and have a final of 20 tests.
+        //Then comes the Boundary Value Analysis tests.
+        //There has been used 3 boundary values test cases for the single prefix entries, such as "441".  These have been ordered by Equivalence Partitioning.
+        //There has been used 2 boundary values test cases for the sequence/intervals of prefixies, such as "344-349". These have been ordered by Equivalence Partitioning.
 
         string[] validPrefixes =
         {
