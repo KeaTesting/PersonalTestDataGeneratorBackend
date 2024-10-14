@@ -1,5 +1,5 @@
 ﻿
-using PersonalTestDataGeneratorBackend.PersonalTestDataGeneratorBackend;
+using PersonalTestDataGeneratorBackend.Generators;
 using System.Text.RegularExpressions;
 
 namespace UnitTests
