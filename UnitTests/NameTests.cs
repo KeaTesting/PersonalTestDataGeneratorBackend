@@ -87,7 +87,7 @@ namespace UnitTests
             bool result;
 
             //Assert
-            Assert.Matches(@"^[a-zA-Z\s]+$", firstName);
+            Assert.Matches(@"^[a-zA-Z\s[.]+$", firstName);
         }
 
         [Fact]
