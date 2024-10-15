@@ -20,81 +20,41 @@ namespace UnitTests
             var firstName = people[0].Name;
             bool result;
 
-            //Act
-            if (firstName.Any(char.IsDigit))
-            {
-                result = true;
-            }else
-            {
-                result = false;
-            }
-
             //Assert
-            Assert.False(result);
+            Assert.False(firstName.Any(char.IsDigit));
         }
 
         [Fact]
         public void Lastname_Should_Not_Contain_Number()
         {
             //Arrange
-            var firstName = people[0].Surname;
+            var lastName = people[0].Surname;
             bool result;
 
-            //Act
-            if (firstName.Any(char.IsDigit))
-            {
-                result = true;
-            }
-            else
-            {
-                result = false;
-            }
-
             //Assert
-            Assert.False(result);
+            Assert.False(lastName.Any(char.IsDigit));
         }
 
-
         [Fact]
-        public void Name_Is_Not_Empty()
+        public void Firstname_Is_Not_Empty()
         {
             //Arrange
             var firstName = people[0].Name;
             bool result;
 
-            //Act
-            if (firstName.Length == 0)
-            {
-                result = true;
-            }
-            else
-            {
-                result = false;
-            }
-
             //Assert
-            Assert.False(result);
+            Assert.False(firstName.Length == 0);
         }
 
         [Fact]
-        public void Surname_Is_Not_Empty()
+        public void Lastname_Is_Not_Empty()
         {
             //Arrange
-            var firstName = people[0].Surname;
+            var LastName = people[0].Surname;
             bool result;
 
-            //Act
-            if (firstName.Length == 0)
-            {
-                result = true;
-            }
-            else
-            {
-                result = false;
-            }
-
             //Assert
-            Assert.False(result);
+            Assert.False(LastName.Length == 0);
         }
 
         [Fact]
@@ -120,38 +80,25 @@ namespace UnitTests
         }
 
         [Fact]
-        public void Name_Does_Not_Contain_Special_Characters()
+        public void Firstname_Does_Not_Contain_Special_Characters()
         {
             //Arrange
             var firstName = people[0].Name;
             bool result;
 
-            //Act
-            result = Regex.IsMatch(firstName, @"^[a-zA-Z\s]+$"); 
-
             //Assert
-            Assert.False(result);
+            Assert.Matches(@"^[a-zA-Z\s]+$", firstName);
         }
 
         [Fact]
-        public void Surname_Does_Not_Contain_Special_Characters()
+        public void Lastname_Does_Not_Contain_Special_Characters()
         {
             //Arrange
-            var firstName = people[0].Surname;
+            var lastName = people[0].Surname;
             bool result;
 
-            //Act
-            if (firstName.Any(char.IsSymbol) || firstName.Any(char.IsPunctuation))
-            {
-                result = true;
-            }
-            else
-            {
-                result = false;
-            }
-
             //Assert
-            Assert.False(result);
+            Assert.Matches(@"^[a-zA-Z\s]+$", lastName);
         }
 
         [Fact]
