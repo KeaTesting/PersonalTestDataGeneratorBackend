@@ -1,15 +1,30 @@
 ﻿
+using Moq;
+using PersonalTestDataGeneratorBackend;
 using PersonalTestDataGeneratorBackend.Generators;
+using PersonalTestDataGeneratorBackend.Repositories;
 using System.Text.RegularExpressions;
 
 namespace UnitTests
 {
     public class AddressGeneratorUnitTest
     {
-        private readonly AddressGenerator _addressGenerator = new AddressGenerator();
+        private readonly AddressGenerator _addressGenerator;
 
         #region Positve Tests
 
+        public AddressGeneratorUnitTest()
+        {
+            var moq = new Mock<PostalCodesRepo>();
+            var returnvalue = new List<PostalCode>() {
+                new PostalCode
+                {
+                    PostCode = 1234,
+                    TownName = "TestCity"
+                }};
+            moq.Setup(x => x.GetPostalCodes()).Returns(returnvalue);
+            _addressGenerator = new AddressGenerator(moq.Object);
+        }
         [Fact]
         public void GenerateStreet_ShouldReturnValidStreetNameWithinLength()
         {
@@ -80,6 +95,30 @@ namespace UnitTests
                 (int.TryParse(result, out int number) && number >= 1 && number <= 50) ||
                 Regex.IsMatch(result, @"^[a-z]-\d{1,999}$")
             );
+        }
+
+        [Fact]
+        public void GeneratePostal_ShouldReturnValidPostalCode()
+        {
+            // Act
+            var postal = _addressGenerator.GeneratePostalCode();
+            var splitPostal = postal.Split(" ", 2);
+            var postalCode = splitPostal[0];
+
+            // Assert 
+            Assert.True(int.TryParse(postalCode, out _));
+        }
+
+        [Fact]
+        public void GeneratePostal_ShouldReturnValidTownName()
+        {
+            // Act
+            var postal = _addressGenerator.GeneratePostalCode();
+            var splitPostal = postal.Split(" ", 2);
+            var townName = splitPostal[1];
+
+            // Assert 
+            Assert.Matches(@"^[a-zA-ZæøåÆØÅ\s]*$", townName);
         }
 
         #endregion
