@@ -10,11 +10,11 @@ namespace UnitTests
 {
     public class NameTests
     {
-        private Person person;
+        private readonly Person _person;
 
         public NameTests()
         {
-            person = PersonHelper.GenerateData(1).First();
+            _person = PersonHelper.GenerateData(1).First();
         }
 
         //tests a name does not contain a number
@@ -22,7 +22,7 @@ namespace UnitTests
         public void Firstname_Should_Not_Contain_Number()
         {
             //Arrange
-            var firstName = person.Name;
+            var firstName = _person.Name;
             
             //Assert
             Assert.False(firstName.Any(char.IsDigit));
@@ -32,7 +32,7 @@ namespace UnitTests
         public void Lastname_Should_Not_Contain_Number()
         {
             //Arrange
-            var lastName = person.Surname;
+            var lastName = _person.Surname;
             
             //Assert
             Assert.False(lastName.Any(char.IsDigit));
@@ -42,7 +42,7 @@ namespace UnitTests
         public void Firstname_Is_Not_Empty()
         {
             //Arrange
-            var firstName = person.Name;
+            var firstName = _person.Name;
            
             //Assert
             Assert.False(firstName.Length == 0);
@@ -52,7 +52,7 @@ namespace UnitTests
         public void Lastname_Is_Not_Empty()
         {
             //Arrange
-            var LastName = person.Surname;
+            var LastName = _person.Surname;
             
             //Assert
             Assert.False(LastName.Length == 0);
@@ -62,8 +62,8 @@ namespace UnitTests
         public void Has_Both_Firstname_And_Lastname()
         {
             //Arrange
-            var firstName = person.Name;
-            var lastName = person.Surname;
+            var firstName = _person.Name;
+            var lastName = _person.Surname;
             bool result;
 
             //Act
@@ -84,28 +84,28 @@ namespace UnitTests
         public void Firstname_Does_Not_Contain_Special_Characters()
         {
             //Arrange
-            var firstName = person.Name;
-           
+            var firstName = _person.Name;
+
             //Assert
-            Assert.Matches(@"^[a-zA-Z\s[.]+$", firstName);
+            Assert.Matches(@"^[a-zA-ZæøåÆØÅ\s[.]+$", firstName);
         }
 
         [Fact]
         public void Lastname_Does_Not_Contain_Special_Characters()
         {
             //Arrange
-            var lastName = person.Surname;
+            var lastName = _person.Surname;
 
             //Assert
-            Assert.Matches(@"^[a-zA-Z\s]+$", lastName);
+            Assert.Matches(@"^[a-zA-ZæøåÆØÅ\s]+$", lastName);
         }
 
         [Fact]
         public void Whole_Name_Is_Valid_Lenght()
         {
             //Arrange
-            var firstName = person.Name;
-            var lastName = person.Surname;
+            var firstName = _person.Name;
+            var lastName = _person.Surname;
 
             //Act
             var wholeName = firstName + " " + lastName;
