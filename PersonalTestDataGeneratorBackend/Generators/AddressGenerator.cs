@@ -5,13 +5,15 @@ namespace PersonalTestDataGeneratorBackend.Generators
 {
     public class AddressGenerator
     {
-        private static readonly Random random = new();
+        private readonly IRandomGenerator _randomGenerator;
         private readonly PostalCodesRepo _context;
 
-        public AddressGenerator(PostalCodesRepo postalCodesRepo)
+        public AddressGenerator(PostalCodesRepo postalCodesRepo, IRandomGenerator randomGenerator)
         {
             _context = postalCodesRepo;
+            _randomGenerator = randomGenerator;
         }
+
         public string GenerateAdress()
         {
             string street = GenerateStreet();
@@ -26,38 +28,38 @@ namespace PersonalTestDataGeneratorBackend.Generators
         //Street. A random assortment of alphabetic characters
         public string GenerateStreet()
         {
-            int length = random.Next(5, 15);
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-            return new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray());
+            int length = _randomGenerator.Next(5, 15);
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅabcdefghijklmnopqrstuvwxyzæøå";
+            return new string(Enumerable.Repeat(chars, length).Select(s => s[_randomGenerator.Next(s.Length)]).ToArray());
         }
 
         //Number. A number from 1 to 999 optionally followed by an uppercase letter (e.g., 43B)
         public string GenerateNumber()
         {
-            int number = random.Next(1, 1000);
-            char? letter = random.Next(0, 2) == 1 ? (char?)random.Next('A', 'Z' + 1) : null;
-            return letter.HasValue ? $"{number}{letter}" : number.ToString();
+            int number = _randomGenerator.Next(1, 1000);
+            string letter = _randomGenerator.Next(0, 2) == 1 ? ((char)_randomGenerator.Next('A', 'Z' + 1)).ToString() : "";
+            return $"{number}{letter}";
         }
 
         //Floor. Either “st” or a number from 1 to 29
         public string GenerateFloor()
         {
-            return random.Next(0, 2) == 0 ? "st" : random.Next(1, 30).ToString();
+            return _randomGenerator.Next(0, 2) == 0 ? "st" : _randomGenerator.Next(1, 30).ToString();
         }
 
         //Door. “th”, “mf”, “tv”, a number from 1 to 50, or a lowercase letter optionally followed by a dash, then followed by one to three numeric digits (e.g., c3, d-14)
         public string GenerateDoor()
         {
-            int choice = random.Next(0, 5);
+            int choice = _randomGenerator.Next(5);
             switch (choice)
             {
                 case 0: return "th";
                 case 1: return "mf";
                 case 2: return "tv";
-                case 3: return random.Next(1, 51).ToString();
+                case 3: return _randomGenerator.Next(1, 51).ToString();
                 case 4:
-                    char letter = (char)random.Next('a', 'z' + 1);
-                    string number = random.Next(0, 1000).ToString();
+                    char letter = (char)_randomGenerator.Next('a', 'z' + 1);
+                    string number = _randomGenerator.Next(1, 1000).ToString();
                     return $"{letter}-{number}";
                 default: return "";
             }
@@ -73,7 +75,7 @@ namespace PersonalTestDataGeneratorBackend.Generators
                 throw new Exception("No postal codes found in the database");
             }
 
-            int randomIndex = random.Next(postalCodes.Count);
+            int randomIndex = _randomGenerator.Next(postalCodes.Count);
             var postalCode = postalCodes[randomIndex];
 
             return $"{postalCode.PostCode} {postalCode.TownName}";

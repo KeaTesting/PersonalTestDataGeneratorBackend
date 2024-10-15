@@ -48,7 +48,7 @@ namespace PersonalTestDataGeneratorBackend
                 }
                 if (query.Address)
                 {
-                    person.Address = new AddressGenerator(new Repositories.PostalCodesRepo()).GenerateAdress();
+                    person.Address = new AddressGenerator(new Repositories.PostalCodesRepo(), new RandomGenerator()).GenerateAdress();
                 }
                 returnvalue.Add(person);
             }
