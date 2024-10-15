@@ -1,4 +1,4 @@
-﻿using PersonalTestDataGeneratorBackend.Generators;
+﻿using PersonalTestDataGeneratorBackend;
 using System.Text.Json;
 
 namespace PersonalTestDataGeneratorBackend
