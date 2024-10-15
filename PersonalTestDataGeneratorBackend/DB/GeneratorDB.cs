@@ -10,5 +10,12 @@ namespace PersonalTestDataGeneratorBackend.DB
 
         public DbSet<PostalCode> PostalCodes { get; set; }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseMySql("Server=localhost;Port=3307;Database=mydatabase;Uid=root;Pwd=12345;", ServerVersion.AutoDetect("Server=localhost;Port=3307;Database=mydatabase;Uid=root;Pwd=12345;"));
+            }
+        }
     }
 }
