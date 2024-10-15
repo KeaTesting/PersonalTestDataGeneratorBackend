@@ -64,20 +64,9 @@ namespace UnitTests
             //Arrange
             var firstName = _person.Name;
             var lastName = _person.Surname;
-            bool result;
-
-            //Act
-            if (firstName.Length > 0 && lastName.Length > 0)
-            {
-                result = true;
-            }
-            else
-            {
-                result = false;
-            }
 
             //Assert
-            Assert.True(result);
+            Assert.True(firstName.Length > 0 && lastName.Length > 0);
         }
 
         [Fact]
