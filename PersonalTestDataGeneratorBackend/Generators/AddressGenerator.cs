@@ -1,9 +1,17 @@
-﻿namespace PersonalTestDataGeneratorBackend.Generators
+﻿using Microsoft.EntityFrameworkCore;
+using PersonalTestDataGeneratorBackend.Repositories;
+
+namespace PersonalTestDataGeneratorBackend.Generators
 {
     public class AddressGenerator
     {
         private static readonly Random random = new();
+        private readonly PostalCodesRepo _context;
 
+        public AddressGenerator(PostalCodesRepo postalCodesRepo)
+        {
+            _context = postalCodesRepo;
+        }
         public string GenerateAdress()
         {
             string street = GenerateStreet();
@@ -56,10 +64,19 @@
         }
 
         //Postal code and town. Randomly extracted from the provided database addresses.sql
-        public static string? GeneratePostalCode()
+        public string GeneratePostalCode()
         {
-            //implement this, when the database is made and has the data from the addresses.sql
-            return null;
+            var postalCodes = _context.GetPostalCodes();
+
+            if (postalCodes.Count == 0)
+            {
+                throw new Exception("No postal codes found in the database");
+            }
+
+            int randomIndex = random.Next(postalCodes.Count);
+            var postalCode = postalCodes[randomIndex];
+
+            return $"{postalCode.PostCode} {postalCode.TownName}";
         }
     }
 }
