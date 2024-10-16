@@ -39,15 +39,8 @@ jobs:
 
     # Execute all unit tests in the solution
     - name: Run tests with coverage and enforce 50% threshold
-      run: |
-        dotnet test UnitTests/UnitTests.csproj --collect:"XPlat Code Coverage" --results-directory ./TestResults --logger trx `
-          /p:Threshold=50 `
-          /p:ThresholdType=line `
-          /p:ThresholdStat=total `
-          /p:CoverletOutputFormat=cobertura `
-          /p:Exclude="[UnitTests]*" `
-          /p:Include="[PersonalTestDataGeneratorBackend]*"
-
+      run: dotnet test UnitTests/UnitTests.csproj --collect:"XPlat Code Coverage" --results-directory ./TestResults --logger trx /p:Threshold=50 /p:ThresholdType=line /p:ThresholdStat=total /p:CoverletOutputFormat=cobertura /p:Exclude="[UnitTests]*" /p:Include="[PersonalTestDataGeneratorBackend]*"
+    
 
       # Execute all integration tests in the solution
     - name: Execute integration tests
