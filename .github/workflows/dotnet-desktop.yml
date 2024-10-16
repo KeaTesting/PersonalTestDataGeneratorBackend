@@ -41,8 +41,8 @@ jobs:
     - name: Execute unit tests
       run: dotnet test UnitTests/UnitTests.csproj --collect:"XPlat Code Coverage" --results-directory ./TestResults --logger trx \
           -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura \
-          -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Include="[YourNamespace]*" \
-          -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Exclude="[YourNamespace.Tests]*" \
+          -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Include="[PersonalTestDataGeneratorBackend]*" \
+          -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Exclude="[UnitTests]*" \
           /p:Threshold=50 /p:ThresholdType=line /p:ThresholdStat=total
       # Execute all integration tests in the solution
     - name: Execute integration tests
