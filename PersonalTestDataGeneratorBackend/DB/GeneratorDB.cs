@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace PersonalTestDataGeneratorBackend.DB
 {
@@ -12,9 +13,19 @@ namespace PersonalTestDataGeneratorBackend.DB
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            IServiceCollection services = new ServiceCollection();
+
+            var binpath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var builder = new ConfigurationBuilder()
+                              .SetBasePath(binpath)
+                              .AddJsonFile("appsettings.json")
+                              .Build();
+
+            var connectionString = builder.GetConnectionString("MySqlConnection");
+
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseMySql("Server=localhost;Port=3307;Database=mydatabase;Uid=root;Pwd=12345;", ServerVersion.AutoDetect("Server=localhost;Port=3307;Database=mydatabase;Uid=root;Pwd=12345;"));
+                optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
             }
         }
     }
