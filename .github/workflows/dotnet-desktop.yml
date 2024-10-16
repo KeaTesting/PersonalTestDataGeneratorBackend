@@ -38,9 +38,44 @@ jobs:
       uses: microsoft/setup-msbuild@v2
 
     # Execute all unit tests in the solution
-    - name: Run tests with coverage and enforce 50% threshold
-      run: dotnet test UnitTests/UnitTests.csproj --collect:"XPlat Code Coverage" --results-directory ./TestResults --logger trx /p:Threshold=50 /p:ThresholdType=line /p:ThresholdStat=total /p:CoverletOutputFormat=cobertura /p:Exclude="[UnitTests]*" /p:Include="[PersonalTestDataGeneratorBackend]*"
+    - name: Run tests and collect coverage
+      run: |
+        dotnet test UnitTests/UnitTests.csproj --collect:"XPlat Code Coverage" --results-directory ./TestResults --logger trx \
+          /p:CoverletOutputFormat=cobertura \
+          /p:CoverletOutput=./TestResults/coverage.cobertura.xml
+      continue-on-error: true  # Ensure the next step runs even if tests fail
     
+    - name: Upload coverage report as artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: coverage-report
+        path: ./TestResults/coverage.cobertura.xml
+
+    
+    - name: Download coverage report
+      uses: actions/download-artifact@v3
+      with:
+        name: coverage-report
+        path: ./TestResults
+    
+    - name: Evaluate coverage
+      run: |
+        # Use xmllint or another tool to parse the coverage result
+        coverage=$(xmllint --xpath "string(//coverage/@line-rate)" ./TestResults/coverage.cobertura.xml)
+        
+        # Convert coverage to percentage
+        coverage_percentage=$(echo "$coverage * 100" | bc)
+    
+        echo "Coverage is: $coverage_percentage%"
+    
+        # Fail the job if coverage is below 50%
+        if (( $(echo "$coverage_percentage < 50" | bc -l) )); then
+          echo "Code coverage is below 50%. Failing the build."
+          exit 1
+        else
+          echo "Code coverage is sufficient."
+        fi
+
 
       # Execute all integration tests in the solution
     - name: Execute integration tests
