@@ -38,12 +38,16 @@ jobs:
       uses: microsoft/setup-msbuild@v2
 
     # Execute all unit tests in the solution
-    - name: Execute unit tests
-      run: dotnet test UnitTests/UnitTests.csproj --collect:"XPlat Code Coverage" --results-directory ./TestResults --logger trx \
-          -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura \
-          -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Include="[PersonalTestDataGeneratorBackend]*" \
-          -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Exclude="[UnitTests]*" \
-          /p:Threshold=50 /p:ThresholdType=line /p:ThresholdStat=total
+    - name: Run tests with coverage and enforce 50% threshold
+      run: |
+        dotnet test UnitTests/UnitTests.csproj --collect:"XPlat Code Coverage" --results-directory ./TestResults --logger trx \
+          /p:Threshold=50 \
+          /p:ThresholdType=line \
+          /p:ThresholdStat=total \
+          /p:CoverletOutputFormat=cobertura \
+          /p:Exclude="[UnitTests]*" \
+          /p:Include="[PersonalTestDataGeneratorBackend]*"
+
       # Execute all integration tests in the solution
     - name: Execute integration tests
       run: dotnet test IntegrationsTests/IntegrationsTests.csproj
