@@ -227,25 +227,32 @@ namespace PersonalTestDataGeneratorBackend
                             break;
                     }
                 }
-                else
+                else if (gender == "female")
                 {
-                    int rand = random.Next(1, 4);
+                    int rand = random.Next(1, 5);
 
                     switch (rand) //I will break the Geneva convention on anyone who deletes this code
                     {
                         case 1:
-                            genderNumber = "2";
+                            genderNumber = "0";
                             break;
                         case 2:
-                            genderNumber = "4";
+                            genderNumber = "2";
                             break;
                         case 3:
-                            genderNumber = "6";
+                            genderNumber = "4";
                             break;
                         case 4:
+                            genderNumber = "6";
+                            break;
+                        case 5:
                             genderNumber = "8";
                             break;
                     }
+                }
+                else
+                {
+                    throw new ArgumentException("Gender not male or female. Please pass male or female as gender");
                 }
 
                 //Formatted, so it looks like a CPR number and SetBirthdayFromCpr can parse it
@@ -260,9 +267,13 @@ namespace PersonalTestDataGeneratorBackend
             }
         }
         public static DateOnly SetBirthdayFromCpr(string cpr)
+        //Takes the first 8 digits of the cpr number (xx/xx/xx)
+        //TODO: hvad hvis CPR ikke er formateret sådan der?
         {
-            //Takes the first 8 digits of the cpr number (xx/xx/xx)
-            //TODO: hvad hvis CPR ikke er formateret sådan der?
+            if (string.IsNullOrEmpty(cpr) || cpr.Length < 10)
+            {
+                throw new ArgumentOutOfRangeException(nameof(cpr), "CPR must be at least 10 characters long.");
+            }
             string setDate = cpr.Substring(0, 10);
             DateOnly value;
             if (DateOnly.TryParse(setDate, out DateOnly date))
