@@ -41,30 +41,39 @@ jobs:
     - name: Run tests and collect coverage
       run: dotnet test UnitTests/UnitTests.csproj --collect:"XPlat Code Coverage" --results-directory ./TestResults --logger trx /p:CoverletOutputFormat=cobertura /p:CoverletOutput=./TestResults/coverage.cobertura.xml
       continue-on-error: true  # Ensure the next step runs even if tests fail
-    
+      
+    - name: Find coverage report
+      id: find_coverage
+      run: |
+        # Use a wildcard to find the coverage report
+        echo "Finding coverage report..."
+        coverage_file=$(find ./TestResults -name "coverage.cobertura.xml" | head -n 1)
+        echo "Coverage file found: $coverage_file"
+        echo "coverage_file=$coverage_file" >> $GITHUB_ENV
+
     - name: Upload coverage report as artifact
       uses: actions/upload-artifact@v3
       with:
         name: coverage-report
-        path: ./TestResults/coverage.cobertura.xml
+        path: ${{ env.coverage_file }}
 
-    
     - name: Download coverage report
       uses: actions/download-artifact@v3
       with:
         name: coverage-report
         path: ./TestResults
-    
+
     - name: Evaluate coverage
       run: |
-        # Use xmllint or another tool to parse the coverage result
-        coverage=$(xmllint --xpath "string(//coverage/@line-rate)" ./TestResults/coverage.cobertura.xml)
+        # Now we have a path to the coverage file
+        coverage_file="./TestResults/coverage.cobertura.xml"
+        coverage=$(xmllint --xpath "string(//coverage/@line-rate)" "$coverage_file")
         
         # Convert coverage to percentage
         coverage_percentage=$(echo "$coverage * 100" | bc)
-    
+
         echo "Coverage is: $coverage_percentage%"
-    
+
         # Fail the job if coverage is below 50%
         if (( $(echo "$coverage_percentage < 50" | bc -l) )); then
           echo "Code coverage is below 50%. Failing the build."
