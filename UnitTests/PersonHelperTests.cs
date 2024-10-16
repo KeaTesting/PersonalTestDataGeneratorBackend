@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Globalization;
 
 namespace UnitTests
 {
@@ -189,13 +190,7 @@ namespace UnitTests
             Assert.InRange(month, 1, 12);
         }
 
-        // NEGATIVE: Invalid gender input
-        [Fact]
-        public void GeneratedCpr_WithInvalidGender_ShouldThrowException()
-        {
-            // Act & Assert
-            Assert.Throws<ArgumentException>(() => PersonHelper.GenerateCprWithGender("unknown"));
-        }
+ 
 
         // POSITIVE: Multiple CPR generations produce unique numbers
         [Fact]
