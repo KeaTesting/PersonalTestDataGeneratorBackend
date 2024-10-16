@@ -39,8 +39,11 @@ jobs:
 
     # Execute all unit tests in the solution
     - name: Execute unit tests
-      run: dotnet test UnitTests/UnitTests.csproj --collect:"XPlat Code Coverage" --results-directory TestResults
-
+      run: dotnet test UnitTests/UnitTests.csproj --collect:"XPlat Code Coverage" --results-directory ./TestResults --logger trx \
+          -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura \
+          -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Include="[YourNamespace]*" \
+          -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Exclude="[YourNamespace.Tests]*" \
+          /p:Threshold=50 /p:ThresholdType=line /p:ThresholdStat=total
       # Execute all integration tests in the solution
     - name: Execute integration tests
       run: dotnet test IntegrationsTests/IntegrationsTests.csproj
@@ -50,16 +53,4 @@ jobs:
       run: msbuild $env:Solution_Name /t:Restore /p:Configuration=$env:Configuration
       env:
         Configuration: ${{ matrix.configuration }}
-        
-    - name: Install ReportGenerator
-      run: dotnet tool install --global dotnet-reportgenerator-globaltool
-
-    - name: Generate Coverage Report
-      run: |
-        reportgenerator "-reports:./TestResults/**/coverage.cobertura.xml" "-targetdir:./TestResults/CoverageReport" -reporttypes:Html
-
-    - name: Upload coverage report artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: coverage-report
-        path: ./TestResults/CoverageReport
+      
