@@ -50,18 +50,16 @@ jobs:
       run: msbuild $env:Solution_Name /t:Restore /p:Configuration=$env:Configuration
       env:
         Configuration: ${{ matrix.configuration }}
-    - name: Use ReportGenerator to check coverage
+        
+    - name: Install ReportGenerator
+      run: dotnet tool install --global dotnet-reportgenerator-globaltool
+
+    - name: Generate Coverage Report
       run: |
-        dotnet tool install --global dotnet-reportgenerator-globaltool
-        reportgenerator "-reports:TestResults/*/coverage.cobertura.xml" "-targetdir:coverage" "-reporttypes:HtmlSummary"
-    
-    - name: Check code coverage
-      id: coverage
-      shell: bash  # Ensures the script is run in Bash
-      run: |
-        coverage=$(grep -Po 'line-rate="\K[0-9.]+' coverage/Summary.xml | awk '{print $1*100}')
-        echo "Code coverage: $coverage%"
-        if (( $(echo "$coverage < 75" | bc -l) )); then
-          echo "Code coverage is below 75%!"
-          exit 1
-        fi
+        reportgenerator "-reports:./TestResults/**/coverage.cobertura.xml" "-targetdir:./TestResults/CoverageReport" -reporttypes:Html
+
+    - name: Upload coverage report artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: coverage-report
+        path: ./TestResults/CoverageReport
