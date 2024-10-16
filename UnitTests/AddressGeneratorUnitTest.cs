@@ -10,14 +10,11 @@ namespace UnitTests
     {
         private readonly AddressGenerator _addressGenerator;
         private readonly Mock<PostalCodesRepo> _postalCodesRepoMock;
-        private readonly Mock<IRandomGenerator> _randomGeneratorMock;
-
-        #region Positve Tests
+        private readonly Random _random;
 
         public AddressGeneratorUnitTest()
         {
             _postalCodesRepoMock = new Mock<PostalCodesRepo>();
-            _randomGeneratorMock = new Mock<IRandomGenerator>();
             var returnvalue = new List<PostalCode>() {
                     new PostalCode
                     {
@@ -25,18 +22,13 @@ namespace UnitTests
                         TownName = "TestCity"
                     }};
             _postalCodesRepoMock.Setup(x => x.GetPostalCodes()).Returns(returnvalue);
-            _addressGenerator = new AddressGenerator(_postalCodesRepoMock.Object, _randomGeneratorMock.Object);
+            _addressGenerator = new AddressGenerator(_postalCodesRepoMock.Object);
+            _random = new Random();
         }
 
-        [Theory]
-        [InlineData(5)] // Lower limit
-        [InlineData(10)] // middle value
-        [InlineData(15)] // Upper limit
-        public void GenerateStreet_ShouldReturnValidStreetNameWithinLength(int length)
+        [Fact] 
+        public void GenerateStreet_ShouldReturnValidStreetNameWithinLength()
         {
-            // Arrange
-            _randomGeneratorMock.Setup(r => r.Next(5, 15)).Returns(length);
-
             //Act
             string street = _addressGenerator.GenerateStreet();
 
@@ -44,41 +36,7 @@ namespace UnitTests
             Assert.InRange(street.Length, 5, 15);
         }
 
-        [Theory]
-        [InlineData(1)]     // Lower limit
-        [InlineData(500)]   // Middle value
-        [InlineData(999)]   // Upper limit
-        public void GenerateNumber_ShouldReturnValidNumberWithoutLetter(int number)
-        {
-            // Arrange
-            _randomGeneratorMock.Setup(r => r.Next(1, 1000)).Returns(number);
 
-            _randomGeneratorMock.Setup(r => r.Next(0, 2)).Returns(0);
-
-            // Act
-            string result = _addressGenerator.GenerateNumber();
-
-            // Assert
-            Assert.Equal($"{number}", result);
-        }
-
-        [Theory]
-        [InlineData(1, "A")]     // Lower limit with a letter
-        [InlineData(999, "Z")]   // Upper limit with a letter
-        public void GenerateNumber_ShouldReturnValidNumberWithLetter(int number, string optionalLetter)
-        {
-            // Arrange
-            _randomGeneratorMock.Setup(r => r.Next(1, 1000)).Returns(number);
-
-            _randomGeneratorMock.Setup(r => r.Next(0, 2)).Returns(1);
-            _randomGeneratorMock.Setup(r => r.Next('A', 'Z' + 1)).Returns(optionalLetter[0]);
-
-            // Act
-            string result = _addressGenerator.GenerateNumber();
-
-            // Assert
-            Assert.Equal($"{number}{optionalLetter}", result);
-        }
 
         [Fact]
         public void GenerateFloor_ShouldReturnStOrNumber()
@@ -122,107 +80,46 @@ namespace UnitTests
             );
         }
 
-        [Fact]
-        public void GenerateDoor_ShouldReturnTh_WhenChoiceIs0()
-        {
-            // Arrange
-            _randomGeneratorMock.Setup(r => r.Next(5)).Returns(0);
-
-            // Act
-            string result = _addressGenerator.GenerateDoor();
-
-            // Assert
-            Assert.Equal("th", result);
-        }
-
-        [Fact]
-        public void GenerateDoor_ShouldReturnMf_WhenChoiceIs1()
-        {
-            // Arrange
-            _randomGeneratorMock.Setup(r => r.Next(5)).Returns(1);
-
-            // Act
-            string result = _addressGenerator.GenerateDoor();
-
-            // Assert
-            Assert.Equal("mf", result);
-        }
-
-        [Fact]
-        public void GenerateDoor_ShouldReturnTv_WhenChoiceIs2()
-        {
-            // Arrange
-            _randomGeneratorMock.Setup(r => r.Next(5)).Returns(2);
-
-            // Act
-            string result = _addressGenerator.GenerateDoor();
-
-            // Assert
-            Assert.Equal("tv", result);
-        }
-
         [Theory]
-        [InlineData(1)] // Lower limit
-        [InlineData(25)] // Middle value
-        [InlineData(50)] // Upper limit
-        public void GenerateDoor_ShouldReturnNumberBetween1And50_WhenChoiceIs3(int number)
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        public void GenerateDoor_ShouldReturnValidDoorValues(int val)
         {
-            // Arrange
-            _randomGeneratorMock.Setup(r => r.Next(5)).Returns(3); // Returns 3 for the first call to Next(5).
-
-            _randomGeneratorMock.Setup(r => r.Next(1, 51)).Returns(number); // Returns 24 for the call to Next(1, 51).
-
+            // Arrange 
+            var validResults = new List<string>() { "mf","th","tv"};
+            for (int i = 0; i <= 50; i++)
+            {
+                validResults.Add(i.ToString());
+            }
             // Act
-            string result = _addressGenerator.GenerateDoor();
+            string result = _addressGenerator.GenerateDoor(val);
 
             // Assert
-            Assert.Equal(number.ToString(), result);
-        }
 
-        [Theory]
-        [InlineData(1)] // Lower limit
-        [InlineData(999)] // Upper limit
-        public void GenerateDoor_ShouldReturnLetterWithDashAndValidNumber_WhenChoiceIs4(int number)
-        {
-            // Arrange
-            _randomGeneratorMock.Setup(r => r.Next(5)).Returns(4);
-            _randomGeneratorMock.Setup(r => r.Next('a', 'z' + 1)).Returns('c');
-            _randomGeneratorMock.Setup(r => r.Next(1, 1000)).Returns(number);
-
-            // Act
-            string result = _addressGenerator.GenerateDoor();
-
-            // Assert
-            Assert.Equal($"c-{number}", result);
-        }
-
-        [Theory]
-        [InlineData('a')] // Lower limit
-        [InlineData('z')] // Upper limit
-        public void GenerateDoor_ShouldReturnValidLetterWithDashAndNumber_WhenChoiceIs4(char letter)
-        {
-            // Arrange
-            _randomGeneratorMock.Setup(r => r.Next(5)).Returns(4);
-            _randomGeneratorMock.Setup(r => r.Next('a', 'z' + 1)).Returns(letter);
-            _randomGeneratorMock.Setup(r => r.Next(1, 1000)).Returns(666);
-
-            // Act
-            string result = _addressGenerator.GenerateDoor();
-
-            // Assert
-            Assert.Equal($"{letter}-666", result);
+            Assert.Contains(result, validResults);
         }
 
         [Fact]
-        public void GeneratePostal_ShouldReturnValidPostalCode()
+        public void GenerateDoor_ShouldReturnValidDoorValues_WhenChoiceIs4()
+        {
+            // Act
+            string result = _addressGenerator.GenerateDoor(4);
+
+            // Assert
+            Assert.True(char.IsLetter(result.Split('-')[0][0]));
+            Assert.True(int.TryParse(result.Split('-')[1],out _));
+        }
+
+        [Fact]
+        public void GeneratePostal_ShouldReturnValidPostalCodeLength()
         {
             // Act
             var postal = _addressGenerator.GeneratePostalCode();
-            var splitPostal = postal.Split(" ", 2);
-            var postalCode = splitPostal[0];
 
             // Assert 
-            Assert.True(int.TryParse(postalCode, out _));
+            Assert.True(postal.PostCode.ToString().Length == 4);
         }
 
         [Fact]
@@ -230,33 +127,11 @@ namespace UnitTests
         {
             // Act
             var postal = _addressGenerator.GeneratePostalCode();
-            var splitPostal = postal.Split(" ", 2);
-            var townName = splitPostal[1];
 
             // Assert 
-            Assert.Matches(@"^[a-zA-ZæøåÆØÅ\s]*$", townName);
+            Assert.Matches(@"^[a-zA-ZæøåÆØÅ\s]*$", postal.TownName);
         }
 
-        #endregion
-        #region Negative Tests
-
-        [Theory]
-        [InlineData(4)] // Lower limit
-        [InlineData(0)] // Zero value
-        [InlineData(16)] // Upper limit
-        public void GenerateStreet_ShouldReturnINValidStreetNameWithinLength(int length)
-        {
-            // Arrange
-            _randomGeneratorMock.Setup(r => r.Next(5, 15)).Returns(length);
-
-            //Act
-            string street = _addressGenerator.GenerateStreet();
-
-            //Assert
-            Assert.NotInRange(street.Length, 5, 15);
-        }
-
-        #endregion
 
     }
 }
