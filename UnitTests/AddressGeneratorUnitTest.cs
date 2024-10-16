@@ -56,33 +56,34 @@ namespace UnitTests
             // Assert
             Assert.True(int.TryParse(result, out _));
         }
-        [Fact]
-        public void GenerateDoor_ShouldReturnValidDoorValuesSides()
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        public void GenerateDoor_ShouldReturnValidDoorValuesSides(int val)
         {
             // Arrange 
             var validResults = new List<string>() { "mf", "th", "tv" };
 
             // Act
-            string result = _addressGenerator.GenerateDoor(0);
+            string result = _addressGenerator.GenerateDoor(val);
 
             // Assert
 
             Assert.Contains(result, validResults);
         }
-        [Theory]
-        [InlineData(1)]
-        [InlineData(2)]
-        [InlineData(3)]
-        public void GenerateDoor_ShouldReturnValidDoorValuesNumbers(int val)
+        [Fact]
+        public void GenerateDoor_ShouldReturnValidDoorValuesNumbers()
         {
             // Arrange 
             var validResults = new List<string>();
-            for (int i = 0; i <= 50;)
+            for (int i = 0; i <= 50; i++)
             {
                 validResults.Add(i.ToString());
             }
+
             // Act
-            string result = _addressGenerator.GenerateDoor(val);
+            string result = _addressGenerator.GenerateDoor(3);
 
             // Assert
 
