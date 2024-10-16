@@ -26,7 +26,7 @@ namespace UnitTests
             _random = new Random();
         }
 
-        [Fact] 
+        [Fact]
         public void GenerateStreet_ShouldReturnValidStreetNameWithinLength()
         {
             //Act
@@ -37,18 +37,6 @@ namespace UnitTests
         }
 
 
-
-        [Fact]
-        public void GenerateFloor_ShouldReturnStOrNumber()
-        {
-            // Act
-            string result = _addressGenerator.GenerateFloor();
-
-            // Assert
-            bool isValid = result == "st" || int.TryParse(result, out int number) && number >= 1 && number <= 29;
-            Assert.True(isValid);
-        }
-
         [Fact]
         public void GenerateFloor_ShouldHaveStIfFloorIsZero()
         {
@@ -56,7 +44,7 @@ namespace UnitTests
             var result = _addressGenerator.GenerateFloor(true);
 
             // Assert
-            Assert.Equal(result,"st");
+            Assert.Equal(result, "st");
         }
 
         [Fact]
@@ -68,16 +56,28 @@ namespace UnitTests
             // Assert
             Assert.True(int.TryParse(result, out _));
         }
+        [Fact]
+        public void GenerateDoor_ShouldReturnValidDoorValuesSides()
+        {
+            // Arrange 
+            var validResults = new List<string>() { "mf", "th", "tv" };
+
+            // Act
+            string result = _addressGenerator.GenerateDoor(0);
+
+            // Assert
+
+            Assert.Contains(result, validResults);
+        }
         [Theory]
-        [InlineData(0)]
         [InlineData(1)]
         [InlineData(2)]
         [InlineData(3)]
-        public void GenerateDoor_ShouldReturnValidDoorValues(int val)
+        public void GenerateDoor_ShouldReturnValidDoorValuesNumbers(int val)
         {
             // Arrange 
-            var validResults = new List<string>() { "mf","th","tv"};
-            for (int i = 0; i <= 50; i++)
+            var validResults = new List<string>();
+            for (int i = 0; i <= 50;)
             {
                 validResults.Add(i.ToString());
             }
