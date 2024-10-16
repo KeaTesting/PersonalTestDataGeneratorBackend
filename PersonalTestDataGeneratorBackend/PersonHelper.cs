@@ -1,4 +1,4 @@
-﻿using PersonalTestDataGeneratorBackend;
+﻿using PersonalTestDataGeneratorBackend.Generators;
 using System.Text.Json;
 
 namespace PersonalTestDataGeneratorBackend
@@ -48,7 +48,7 @@ namespace PersonalTestDataGeneratorBackend
                 }
                 if (query.Address)
                 {
-                    //TODO
+                    person.Address = new AddressGenerator(new Repositories.PostalCodesRepo()).GenerateAdress();
                 }
                 returnvalue.Add(person);
             }
