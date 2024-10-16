@@ -7,19 +7,16 @@ on:
     branches: [ "main" ]
 
 jobs:
-
   build:
-
     strategy:
       matrix:
         configuration: [Release]
 
-    runs-on: windows-latest  # For a list of available runner types, refer to
-                             # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
+    runs-on: windows-latest
 
     env:
-      Solution_Name: PersonalTestDataGeneratorBackend.sln                        # Replace with your solution name, i.e. MyWpfApp.sln.
-      Test_Project_Path: UnitTest/UnitTests.csproj            # Replace with the path to your test project, i.e. MyWpfApp.Tests\MyWpfApp.Tests.csproj.
+      Solution_Name: PersonalTestDataGeneratorBackend.sln
+      Test_Project_Path: UnitTest/UnitTests.csproj
 
     steps:
     - name: Checkout
@@ -33,23 +30,28 @@ jobs:
       with:
         dotnet-version: 8.0.x
 
-    # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
+    # Add MSBuild to the PATH
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@v2
 
-    # Execute all unit tests in the solution
+    # Execute all unit tests in the solution and collect coverage
     - name: Run tests and collect coverage
-      run: dotnet test UnitTests/UnitTests.csproj --collect:"XPlat Code Coverage" --results-directory ./TestResults --logger trx /p:CoverletOutputFormat=cobertura /p:CoverletOutput=./TestResults/coverage.cobertura.xml
+      run: dotnet test $env:Test_Project_Path --collect:"XPlat Code Coverage" --results-directory ./TestResults --logger trx \
+        /p:CoverletOutputFormat=cobertura /p:CoverletOutput=./TestResults/coverage.cobertura.xml
       continue-on-error: true  # Ensure the next step runs even if tests fail
-      
+
     - name: Find coverage report
       id: find_coverage
+      shell: pwsh  # Specify PowerShell as the shell
       run: |
-        # Use a wildcard to find the coverage report
-        echo "Finding coverage report..."
-        coverage_file=$(find ./TestResults -name "coverage.cobertura.xml" | head -n 1)
-        echo "Coverage file found: $coverage_file"
-        echo "coverage_file=$coverage_file" >> $GITHUB_ENV
+        # Use PowerShell to find the coverage report
+        $coverage_file = Get-ChildItem -Path './TestResults' -Filter 'coverage.cobertura.xml' -Recurse | Select-Object -First 1
+        if ($null -eq $coverage_file) {
+          Write-Error "Coverage file not found!"
+          exit 1
+        }
+        Write-Host "Coverage file found: $coverage_file"
+        echo "coverage_file=$($coverage_file.FullName)" >> $GITHUB_ENV
 
     - name: Upload coverage report as artifact
       uses: actions/upload-artifact@v3
@@ -82,8 +84,7 @@ jobs:
           echo "Code coverage is sufficient."
         fi
 
-
-      # Execute all integration tests in the solution
+    # Execute all integration tests in the solution
     - name: Execute integration tests
       run: dotnet test IntegrationsTests/IntegrationsTests.csproj
 
@@ -92,4 +93,3 @@ jobs:
       run: msbuild $env:Solution_Name /t:Restore /p:Configuration=$env:Configuration
       env:
         Configuration: ${{ matrix.configuration }}
-      
