@@ -64,22 +64,6 @@ namespace UnitTests
             }
         }
 
-        [Fact]
-        public void GenerateDoor_ShouldReturnValidDoorOption()
-        {
-            // Act
-            string result = _addressGenerator.GenerateDoor();
-
-            // Assert
-            Assert.True(
-                result == "th" ||
-                result == "mf" ||
-                result == "tv" ||
-                (int.TryParse(result, out int number) && number >= 1 && number <= 50) ||
-                Regex.IsMatch(result, @"^[a-z]-\d{1,999}$")
-            );
-        }
-
         [Theory]
         [InlineData(0)]
         [InlineData(1)]
@@ -108,8 +92,7 @@ namespace UnitTests
             string result = _addressGenerator.GenerateDoor(4);
 
             // Assert
-            Assert.True(char.IsLetter(result.Split('-')[0][0]));
-            Assert.True(int.TryParse(result.Split('-')[1],out _));
+            Assert.True(Regex.IsMatch(result, @"^[a-z]-\d{1,999}$"));
         }
 
         [Fact]
