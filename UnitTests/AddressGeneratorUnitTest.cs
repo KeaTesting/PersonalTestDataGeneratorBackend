@@ -50,20 +50,24 @@ namespace UnitTests
         }
 
         [Fact]
-        public void GenerateFloor_ShouldReturnNumberBetween1And29()
+        public void GenerateFloor_ShouldHaveStIfFloorIsZero()
         {
             // Act
-            var results = Enumerable.Range(0, 100).Select(_ => _addressGenerator.GenerateFloor()).Where(floor => floor != "st").ToList();
+            var result = _addressGenerator.GenerateFloor(true);
 
             // Assert
-            foreach (var result in results)
-            {
-                int number;
-                Assert.True(int.TryParse(result, out number));
-                Assert.InRange(number, 1, 29);
-            }
+            Assert.Equal(result,"st");
         }
 
+        [Fact]
+        public void GenerateFloor_ShouldHaveNumberIfFloorIsNotZero()
+        {
+            // Act
+            var result = _addressGenerator.GenerateFloor(false);
+
+            // Assert
+            Assert.True(int.TryParse(result, out _));
+        }
         [Theory]
         [InlineData(0)]
         [InlineData(1)]

@@ -41,9 +41,20 @@ namespace PersonalTestDataGeneratorBackend.Generators
         }
 
         //Floor. Either “st” or a number from 1 to 29
-        public string GenerateFloor()
+        public string GenerateFloor(bool? isGroundFloor = null, int? specificFloor = null)
         {
-            return _random.Next(0, 2) == 0 ? "st" : _random.Next(1, 30).ToString();
+            // Determine the value for the first decision
+            var decision = isGroundFloor ?? (_random.Next(0, 2) == 0);
+
+            // If decision is true, return "st"
+            if (decision == true)
+            {
+                return "st";
+            }
+
+            // Determine the specific floor number if the decision was true
+            int floorNumber = specificFloor ?? _random.Next(1, 30);
+            return floorNumber.ToString();
         }
 
         //Door. “th”, “mf”, “tv”, a number from 1 to 50, or a lowercase letter optionally followed by a dash, then followed by one to three numeric digits (e.g., c3, d-14)
