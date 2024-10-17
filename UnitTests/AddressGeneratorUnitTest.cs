@@ -1,6 +1,6 @@
 ﻿using Moq;
-using PersonalTestDataGeneratorBackend;
 using PersonalTestDataGeneratorBackend.Generators;
+using PersonalTestDataGeneratorBackend.Models;
 using PersonalTestDataGeneratorBackend.Repositories;
 using System.Text.RegularExpressions;
 
@@ -9,12 +9,12 @@ namespace UnitTests
     public class AddressGeneratorUnitTest
     {
         private readonly AddressGenerator _addressGenerator;
-        private readonly Mock<PostalCodesRepo> _postalCodesRepoMock;
+        private readonly Mock<PostalCodesRepository> _postalCodesRepoMock;
         private readonly Random _random;
 
         public AddressGeneratorUnitTest()
         {
-            _postalCodesRepoMock = new Mock<PostalCodesRepo>();
+            _postalCodesRepoMock = new Mock<PostalCodesRepository>();
             var returnvalue = new List<PostalCode>() {
                     new PostalCode
                     {

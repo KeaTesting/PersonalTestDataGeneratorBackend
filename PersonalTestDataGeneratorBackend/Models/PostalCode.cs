@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace PersonalTestDataGeneratorBackend
+namespace PersonalTestDataGeneratorBackend.Models
 {
     public class PostalCode
     {

@@ -1,14 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PersonalTestDataGeneratorBackend.DB;
+using PersonalTestDataGeneratorBackend.Models;
 using System;
 
 namespace PersonalTestDataGeneratorBackend.Repositories
 {
-    public class PostalCodesRepo
+    public class PostalCodesRepository
     {
         private readonly GeneratorDB _context;
 
-        public PostalCodesRepo()
+        public PostalCodesRepository()
         {
             var options = new DbContextOptionsBuilder<GeneratorDB>().Options;
             _context = new GeneratorDB(options);

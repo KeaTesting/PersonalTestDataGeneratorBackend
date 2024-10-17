@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PersonalTestDataGeneratorBackend
+namespace PersonalTestDataGeneratorBackend.Models
 {
     public class Person
     {

@@ -1,4 +1,4 @@
-﻿namespace PersonalTestDataGeneratorBackend
+﻿namespace PersonalTestDataGeneratorBackend.Models
 {
     public class PersonQuery
     {

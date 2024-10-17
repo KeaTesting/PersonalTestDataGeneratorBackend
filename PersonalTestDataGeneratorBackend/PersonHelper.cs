@@ -1,11 +1,13 @@
 ﻿using PersonalTestDataGeneratorBackend.Generators;
+using PersonalTestDataGeneratorBackend.Models;
+using PersonalTestDataGeneratorBackend.Repositories;
 using System.Text.Json;
 
 namespace PersonalTestDataGeneratorBackend
 {
     public static class PersonHelper
     {
-
+        private static PostalCodesRepository _repository = new PostalCodesRepository();
         public static string CleanCpr(string cpr)
         {
             var clean = cpr.Replace("/", "");
@@ -48,7 +50,7 @@ namespace PersonalTestDataGeneratorBackend
                 }
                 if (query.Address)
                 {
-                    person.Address = new AddressGenerator(new Repositories.PostalCodesRepo()).GenerateAdress();
+                    person.Address = new AddressGenerator(_repository).GenerateAdress().ToString();
                 }
                 returnvalue.Add(person);
             }
