@@ -75,7 +75,7 @@ namespace PersonalTestDataGeneratorBackend.Generators
                     char letter = (char)_random.Next('a', 'z' + 1);
                     string number = _random.Next(1, 200).ToString();
                     return $"{letter}-{number}";
-                default: return "";
+                default: throw new Exception("Invalid selection");
             }
         }
 

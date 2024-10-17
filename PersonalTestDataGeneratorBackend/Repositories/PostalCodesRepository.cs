@@ -8,11 +8,15 @@ namespace PersonalTestDataGeneratorBackend.Repositories
     public class PostalCodesRepository
     {
         private readonly GeneratorDB _context;
-
         public PostalCodesRepository()
         {
             var options = new DbContextOptionsBuilder<GeneratorDB>().Options;
             _context = new GeneratorDB(options);
+
+        }
+        public PostalCodesRepository(GeneratorDB db)
+        {
+            _context = db;
         }
 
         public virtual List<PostalCode> GetPostalCodes()

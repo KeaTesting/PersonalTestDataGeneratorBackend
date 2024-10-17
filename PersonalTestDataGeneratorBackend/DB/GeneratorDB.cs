@@ -14,8 +14,6 @@ namespace PersonalTestDataGeneratorBackend.DB
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            IServiceCollection services = new ServiceCollection();
-
             var binpath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             var builder = new ConfigurationBuilder()
                               .SetBasePath(binpath)
