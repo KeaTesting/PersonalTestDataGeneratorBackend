@@ -5,6 +5,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using PersonalTestDataGeneratorBackend;
+using PersonalTestDataGeneratorBackend.Models;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace UnitTests
 {
@@ -14,7 +16,12 @@ namespace UnitTests
 
         public NameTests()
         {
-            _person = PersonHelper.GenerateData(1).First();
+            var query = new PersonQuery()
+            {
+                Name = true,
+                Surname = true,
+            };
+            _person = PersonHelper.GeneratePersons(query,1).First();
         }
 
         //tests a name does not contain a number

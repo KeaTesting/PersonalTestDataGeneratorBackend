@@ -4,6 +4,7 @@ using PersonalTestDataGeneratorBackend;
 using System;
 using System.IO;
 using System.Text.Json;
+using PersonalTestDataGeneratorBackend.Models;
 
 namespace PersonalTestDataGeneratorBackend
 {

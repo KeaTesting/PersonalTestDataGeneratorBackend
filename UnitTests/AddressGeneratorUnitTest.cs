@@ -1,6 +1,6 @@
 ﻿using Moq;
-using PersonalTestDataGeneratorBackend;
 using PersonalTestDataGeneratorBackend.Generators;
+using PersonalTestDataGeneratorBackend.Models;
 using PersonalTestDataGeneratorBackend.Repositories;
 using System.Text.RegularExpressions;
 
@@ -8,13 +8,13 @@ namespace UnitTests
 {
     public class AddressGeneratorUnitTest
     {
-        private readonly AddressGenerator _addressGenerator;
-        private readonly Mock<PostalCodesRepo> _postalCodesRepoMock;
-        private readonly Random _random;
+        private AddressGenerator _addressGenerator;
+        private Mock<PostalCodesRepository> _postalCodesRepoMock;
+        private Random _random;
 
         public AddressGeneratorUnitTest()
         {
-            _postalCodesRepoMock = new Mock<PostalCodesRepo>();
+            _postalCodesRepoMock = new Mock<PostalCodesRepository>();
             var returnvalue = new List<PostalCode>() {
                     new PostalCode
                     {
@@ -36,12 +36,57 @@ namespace UnitTests
             Assert.InRange(street.Length, 5, 15);
         }
 
+        [Fact]
+        public void GenerateAddress_ShouldHaveStreet()
+        {
+            //Act
+            var address = _addressGenerator.GenerateAdress();
+
+            //Assert
+            Assert.False(string.IsNullOrEmpty(address.Street));
+        }
+        [Fact]
+        public void GenerateAddress_ShouldHaveNumber()
+        {
+            //Act
+            var address = _addressGenerator.GenerateAdress();
+
+            //Assert
+            Assert.False(string.IsNullOrEmpty(address.Number));
+        }
+        [Fact]
+        public void GenerateAddress_ShouldHaveFloor()
+        {
+            //Act
+            var address = _addressGenerator.GenerateAdress();
+
+            //Assert
+            Assert.False(string.IsNullOrEmpty(address.Floor));
+        }
+        [Fact]
+        public void GenerateAddress_ShouldHaveDoor()
+        {
+            //Act
+            var address = _addressGenerator.GenerateAdress();
+
+            //Assert
+            Assert.False(string.IsNullOrEmpty(address.Door));
+        }
+        [Fact]
+        public void GenerateAddress_ShouldHavePostalCode()
+        {
+            //Act
+            var address = _addressGenerator.GenerateAdress();
+
+            //Assert
+            Assert.False(string.IsNullOrEmpty(address.PostalCode.FullName));
+        }
 
         [Fact]
         public void GenerateFloor_ShouldHaveStIfFloorIsZero()
         {
             // Act
-            var result = _addressGenerator.GenerateFloor(true);
+            var result = _addressGenerator.GenerateFloor(isGroundFloor :true);
 
             // Assert
             Assert.Equal(result, "st");
@@ -51,10 +96,23 @@ namespace UnitTests
         public void GenerateFloor_ShouldHaveNumberIfFloorIsNotZero()
         {
             // Act
-            var result = _addressGenerator.GenerateFloor(false);
+            var result = _addressGenerator.GenerateFloor(isGroundFloor :false); 
 
             // Assert
             Assert.True(int.TryParse(result, out _));
+        }
+
+        [Fact]
+        public void GenerateFloor_GenerateSecificNumberIfParsed()
+        {
+            // Arrange
+            var setNumber = 4;
+
+            // Act
+            var result = _addressGenerator.GenerateFloor(isGroundFloor: false, specificFloor: setNumber);
+
+            // Assert
+            Assert.True(int.TryParse(result, out int number) && number == setNumber);
         }
         [Theory]
         [InlineData(0)]
@@ -101,6 +159,13 @@ namespace UnitTests
         }
 
         [Fact]
+        public void GenerateDoor_ShouldFailWithInvalidInput()
+        {
+            // Assert
+            Assert.Throws<Exception>(() => _addressGenerator.GenerateDoor(40));
+        }
+
+        [Fact]
         public void GeneratePostal_ShouldReturnValidPostalCodeLength()
         {
             // Act
@@ -120,6 +185,17 @@ namespace UnitTests
             Assert.Matches(@"^[a-zA-ZæøåÆØÅ\s]*$", postal.TownName);
         }
 
+        [Fact]
+        public void GeneratPostCodes_ShouldReturnErrorIfCountIsNull()
+        {
+            //Arrange
+            _postalCodesRepoMock = new Mock<PostalCodesRepository>();
+            var returnvalue = new List<PostalCode>();
+            _postalCodesRepoMock.Setup(x => x.GetPostalCodes()).Returns(returnvalue);
+            _addressGenerator = new AddressGenerator(_postalCodesRepoMock.Object);
 
+            //Assert
+            Assert.Throws<Exception>(() => _addressGenerator.GeneratePostalCode());
+        }
     }
 }

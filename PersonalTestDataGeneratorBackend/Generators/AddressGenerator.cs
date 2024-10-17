@@ -1,27 +1,28 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PersonalTestDataGeneratorBackend.Models;
 using PersonalTestDataGeneratorBackend.Repositories;
 
 namespace PersonalTestDataGeneratorBackend.Generators
 {
     public class AddressGenerator
     {
-        private readonly PostalCodesRepo _context;
+        private readonly PostalCodesRepository _context;
         private readonly Random _random;
-        public AddressGenerator(PostalCodesRepo postalCodesRepo)
+        public AddressGenerator(PostalCodesRepository postalCodesRepo)
         {
             _random = new Random();
             _context = postalCodesRepo;
         }
 
-        public string GenerateAdress()
+        public Address GenerateAdress()
         {
-            string street = GenerateStreet();
-            string number = GenerateNumber();
-            string floor = GenerateFloor();
-            string door = GenerateDoor();
-            string postalCode = GeneratePostalCode().FullName;
-
-            return $"{street} {number}, {floor}. {door}, {postalCode}";
+            var address = new Address();
+            address.Street = GenerateStreet();
+            address.Number = GenerateNumber();
+            address.Floor = GenerateFloor();
+            address.Door = GenerateDoor();
+            address.PostalCode = GeneratePostalCode();
+            return address;
         }
 
         //Street. A random assortment of alphabetic characters
@@ -74,7 +75,7 @@ namespace PersonalTestDataGeneratorBackend.Generators
                     char letter = (char)_random.Next('a', 'z' + 1);
                     string number = _random.Next(1, 200).ToString();
                     return $"{letter}-{number}";
-                default: return "";
+                default: throw new Exception("Invalid selection");
             }
         }
 
