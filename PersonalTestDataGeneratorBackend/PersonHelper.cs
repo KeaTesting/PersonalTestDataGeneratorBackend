@@ -1,6 +1,7 @@
 ﻿using PersonalTestDataGeneratorBackend.Generators;
 using PersonalTestDataGeneratorBackend.Models;
 using PersonalTestDataGeneratorBackend.Repositories;
+using System.Globalization;
 using System.Text.Json;
 
 namespace PersonalTestDataGeneratorBackend
@@ -186,13 +187,15 @@ namespace PersonalTestDataGeneratorBackend
             //TODO: hvad hvis CPR ikke er formateret sådan der?
             string setDate = cpr.Substring(0, 10);
             DateOnly value;
-            if (DateOnly.TryParse(setDate, out DateOnly date))
+            CultureInfo danishCulture = new CultureInfo("da-DK");
+
+            if (DateOnly.TryParse(setDate, danishCulture, DateTimeStyles.None, out DateOnly date))
             {
                 value = date;
             }
             else
             {
-                throw new Exception("Invalid CPR");
+                throw new Exception($"Invalid CPR with value{cpr}");
             }
             return value;
         }
