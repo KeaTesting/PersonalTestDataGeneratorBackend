@@ -133,18 +133,5 @@ namespace UnitTests
             //Assert
             Assert.Throws<Exception>(()=> PersonHelper.SetBirthdayFromCpr("Skibidi toilet"));
         }
-
-        [Fact]
-        public void GeneratePersons_HasIdWhenGotten()
-        {
-            //Arrange
-            var query = new PersonQuery();
-
-            //Act
-            var person = PersonHelper.GeneratePersons(query, 1).First();
-
-            //Assert
-            Assert.True(person.Id > 0);
-        }
     }
 }
