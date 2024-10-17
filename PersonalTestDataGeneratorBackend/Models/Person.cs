@@ -11,15 +11,13 @@ namespace PersonalTestDataGeneratorBackend.Models
         public string? Cpr { get; set; }
         public string? PhoneNumber { get; set; }
         public string? Address { get; set; }
-
-        private DateOnly? _birthday;
+        public DateOnly? Birthday { get; set; }
 
         public Person()
         {
 
         }
 
-        public DateOnly? Birthday { get => _birthday; set => _birthday = value; }
 
     }
 }

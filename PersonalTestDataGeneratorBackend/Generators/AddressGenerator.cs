@@ -21,7 +21,7 @@ namespace PersonalTestDataGeneratorBackend.Generators
             address.Number = GenerateNumber();
             address.Floor = GenerateFloor();
             address.Door = GenerateDoor();
-            address.PostalCode = GeneratePostalCode().FullName;
+            address.PostalCode = GeneratePostalCode();
             return address;
         }
 

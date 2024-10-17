@@ -36,6 +36,51 @@ namespace UnitTests
             Assert.InRange(street.Length, 5, 15);
         }
 
+        [Fact]
+        public void GenerateAddress_ShouldHaveStreet()
+        {
+            //Act
+            var address = _addressGenerator.GenerateAdress();
+
+            //Assert
+            Assert.False(string.IsNullOrEmpty(address.Street));
+        }
+        [Fact]
+        public void GenerateAddress_ShouldHaveNumber()
+        {
+            //Act
+            var address = _addressGenerator.GenerateAdress();
+
+            //Assert
+            Assert.False(string.IsNullOrEmpty(address.Number));
+        }
+        [Fact]
+        public void GenerateAddress_ShouldHaveFloor()
+        {
+            //Act
+            var address = _addressGenerator.GenerateAdress();
+
+            //Assert
+            Assert.False(string.IsNullOrEmpty(address.Floor));
+        }
+        [Fact]
+        public void GenerateAddress_ShouldHaveDoor()
+        {
+            //Act
+            var address = _addressGenerator.GenerateAdress();
+
+            //Assert
+            Assert.False(string.IsNullOrEmpty(address.Door));
+        }
+        [Fact]
+        public void GenerateAddress_ShouldHavePostalCode()
+        {
+            //Act
+            var address = _addressGenerator.GenerateAdress();
+
+            //Assert
+            Assert.False(string.IsNullOrEmpty(address.PostalCode.FullName));
+        }
 
         [Fact]
         public void GenerateFloor_ShouldHaveStIfFloorIsZero()

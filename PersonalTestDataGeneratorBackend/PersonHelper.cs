@@ -26,15 +26,15 @@ namespace PersonalTestDataGeneratorBackend
                 var person = new Person();
                 var gender = random.Next(0, 2) == 0 ? "female" : "male";
                 var cpr = GenerateCprWithGender(gender);
-                if(query.Cpr)
+                if (query.Cpr)
                 {
                     person.Cpr = CleanCpr(cpr);
                 }
-                if(query.Gender)
+                if (query.Gender)
                 {
                     person.Gender = gender;
                 }
-                if(query.Birthday)
+                if (query.Birthday)
                 {
                     person.Birthday = SetBirthdayFromCpr(cpr);
                 }
@@ -44,7 +44,7 @@ namespace PersonalTestDataGeneratorBackend
                     person.Name = genderedNameList.ToArray()[random.Next(0, genderedNameList.Count() - 1)].Name;
                     person.Surname = genderedNameList.ToArray()[random.Next(0, genderedNameList.Count() - 1)].Surname;
                 }
-                if(query.PhoneNumber)
+                if (query.PhoneNumber)
                 {
                     person.PhoneNumber = PhoneNumberGenerator.GeneratePhoneNumber();
                 }
@@ -72,21 +72,10 @@ namespace PersonalTestDataGeneratorBackend
             {
                 for (int i = 0; i < amount; i++)
                 {
-
-
-                    try
-                    {
-                        Random random = new Random();
-                        int randomIndex = random.Next(people.Count);
-                        Person randomPerson = people[randomIndex];
-                        randomPeople.Add(randomPerson);
-
-                    }
-                    catch
-                    {
-                        Console.WriteLine("Random failed");
-                    }
-
+                    Random random = new Random();
+                    int randomIndex = random.Next(people.Count);
+                    Person randomPerson = people[randomIndex];
+                    randomPeople.Add(randomPerson);
                 }
             }
             else
